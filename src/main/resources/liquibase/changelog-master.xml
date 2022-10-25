@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+    <changeSet  id="1"  author="asia">
+        <createTable tableName="groups">
+            <column  name="id"  type="int(11)" autoIncrement="true">
+                <constraints  primaryKey="true"  nullable="false"/>
+            </column>
+            <column  name="group_name"  type="varchar(255)">
+                <constraints  nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="users">
+            <column  name="id"  type="int(11)" autoIncrement="true">
+                <constraints  primaryKey="true"  nullable="false"/>
+            </column>
+            <column  name="LastName"  type="varchar(255)">
+                <constraints  nullable="false"/>
+            </column>
+            <column  name="FirstName"  type="varchar(255)">
+                <constraints  nullable="false"/>
+            </column>
+            <column  name="Address"  type="varchar(255)">
+                <constraints  nullable="false"/>
+            </column>
+            <column  name="City"  type="varchar(255)">
+                <constraints  nullable="false"/>
+            </column>
+            <column  name="group_id"  type="int(11)">
+                <constraints nullable="false" foreignKeyName="fk_users_group" references="groups(id)"/>
+            </column>
+        </createTable>
+        <createTable tableName="messages">
+            <column  name="id"  type="int(11)" autoIncrement="true">
+                <constraints  primaryKey="true"  nullable="false"/>
+            </column>
+            <column  name="sender"  type="int(11)">
+                <constraints  nullable="false" foreignKeyName="fk_sender_users" references="users(id)"/>
+            </column>
+            <column  name="receiver"  type="int(11)">
+                <constraints  nullable="false" foreignKeyName="fk_receiver_users" references="users(id)"/>
+            </column>
+            <column  name="message"  type="text">
+                <constraints  nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="subjects">
+            <column  name="id"  type="int(11)" autoIncrement="true">
+                <constraints  primaryKey="true"  nullable="false"/>
+            </column>
+            <column  name="Name"  type="varchar(255)">
+                <constraints  nullable="false"/>
+            </column>
+            <column  name="teacher_id"  type="int(11)">
+                <constraints  nullable="false" foreignKeyName="fk_subjects_users" references="users(id)"/>
+            </column>
+        </createTable>
+        <createTable tableName="grades">
+            <column  name="id"  type="int(11)" autoIncrement="true">
+                <constraints  primaryKey="true"  nullable="false"/>
+            </column>
+            <column  name="student_id"  type="int(11)">
+                <constraints  nullable="false" foreignKeyName="fk_student_users" references="users(id)"/>
+            </column>
+            <column  name="teacher_id"  type="int(11)">
+                <constraints  nullable="false" foreignKeyName="fk_teacher_users" references="users(id)"/>
+            </column>
+            <column  name="subject_id"  type="int(11)">
+                <constraints  nullable="false" foreignKeyName="fk_subject_subjects" references="subjects(id)"/>
+            </column>
+            <column  name="grade"  type="int(11)">
+                <constraints  nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
