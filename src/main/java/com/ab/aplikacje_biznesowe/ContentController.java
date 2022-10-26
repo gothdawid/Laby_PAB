@@ -1,17 +1,19 @@
 package com.ab.aplikacje_biznesowe;
 
+import java.lang.reflect.Type;
 import java.sql.*;
 
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellDataFeatures;
-import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -26,13 +28,28 @@ import static com.ab.aplikacje_biznesowe.HelloApplication.connection;
 public class ContentController {
     public Font x3;
     public Color x4;
-    public TableView users_table;
-    public TableView grades_table;
-    public TableView subjects_table;
-    public TableView messages_table;
-    public TableView groups_table;
-    private ObservableList<ObservableList> data;
+    public TableView<Tables_Types.User> users_table;
+    public TableView<Tables_Types.Grades> grades_table;
+    public TableView<Tables_Types.Subjects> subjects_table;
+    public TableView<Tables_Types.Messages> messages_table;
+    public TableView<Tables_Types.Groups> groups_table;
 
+
+    public void parseTable2(ResultSet rs, TableView table){
+        table.getItems().clear();
+        table.getColumns().clear();
+
+        try {
+            while(rs.next()){
+                Tables_Types.User us = new Tables_Types.User(rs);
+                table.getItems().add(us);
+                System.out.println(us.toString());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public void parseTable(ResultSet rs, TableView table) {
         try {
@@ -81,13 +98,14 @@ public class ContentController {
         ResultSet messages = connection.query("SELECT * FROM messages;");
         ResultSet groups = connection.query("SELECT * FROM groups;");
         ResultSet grades = connection.query("SELECT * FROM grades;");
-        parseTable(users, users_table);
+
         parseTable(subjects, subjects_table);
         parseTable(messages, messages_table);
         parseTable(groups, groups_table);
         parseTable(grades, grades_table);
-    }
+        parseTable2(users, users_table);
 
+    }
 }
 
 
