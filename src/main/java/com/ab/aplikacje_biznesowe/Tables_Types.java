@@ -1,7 +1,10 @@
 package com.ab.aplikacje_biznesowe;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Tables_Types {
-    class User {
+    public static class User {
         private int id;
         private String lastName;
         private String firstName;
@@ -9,13 +12,17 @@ public class Tables_Types {
         private String city;
         private int groupId;
 
-        public User(int id, String lastName, String firstName, String address, String city, int groupId) {
-            this.id = id;
-            this.lastName = lastName;
-            this.firstName = firstName;
-            this.address = address;
-            this.city = city;
-            this.groupId = groupId;
+        public User(ResultSet rs) {
+            try {
+                this.id = rs.getInt("id");
+                this.lastName = rs.getString("last_name");
+                this.firstName = rs.getString("first_name");
+                this.address = rs.getString("address");
+                this.city = rs.getString("city");
+                this.groupId = rs.getInt("group_id");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         public int getId() {
@@ -68,19 +75,23 @@ public class Tables_Types {
         }
     }
 
-    class Grades {
+    public static class Grades {
         private int id;
         private int studentId;
         private int teacherId;
         private int subjectId;
         private int grade;
 
-        public Grades(int id, int studentId, int teacherId, int subjectId, int grade) {
-            this.id = id;
-            this.studentId = studentId;
-            this.teacherId = teacherId;
-            this.subjectId = subjectId;
-            this.grade = grade;
+        public Grades(ResultSet rs) {
+            try {
+                this.id = rs.getInt("id");
+                this.studentId = rs.getInt("student_id");
+                this.teacherId = rs.getInt("teacher_id");
+                this.subjectId = rs.getInt("subject_id");
+                this.grade = rs.getInt("grade");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         public int getId() {
@@ -126,13 +137,17 @@ public class Tables_Types {
         }
     }
 
-    class Groups {
+    public static class Groups {
         private int id;
         private String group_name;
 
-        public Groups(int id, String group_name) {
-            this.id = id;
-            this.group_name = group_name;
+        public Groups(ResultSet rs) {
+            try {
+                this.id = rs.getInt("id");
+                this.group_name = rs.getString("group_name");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         public int getId() {
@@ -157,15 +172,19 @@ public class Tables_Types {
         }
     }
 
-    class Subjects {
+    public static class Subjects {
         private int id;
         private String name;
         private int teacher_id;
 
-        public Subjects(int id, String name, int teacher_id) {
-            this.id = id;
-            this.name = name;
-            this.teacher_id = teacher_id;
+        public Subjects(ResultSet rs) {
+            try {
+                this.id = rs.getInt("id");
+                this.name = rs.getString("name");
+                this.teacher_id = rs.getInt("teacher_id");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         public int getId() {
@@ -197,17 +216,21 @@ public class Tables_Types {
         }
     }
 
-    class Messages {
+    public static class Messages {
         private int id;
         private int sender_id;
         private int receiver_id;
         private String message;
 
-        public Messages(int id, int sender_id, int receiver_id, String message) {
-            this.id = id;
-            this.sender_id = sender_id;
-            this.receiver_id = receiver_id;
-            this.message = message;
+        public Messages(ResultSet rs) {
+            try {
+                this.id = rs.getInt("id");
+                this.sender_id = rs.getInt("sender_id");
+                this.receiver_id = rs.getInt("receiver_id");
+                this.message = rs.getString("message");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         public int getId() {
