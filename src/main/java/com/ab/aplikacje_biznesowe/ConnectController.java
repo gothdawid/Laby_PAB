@@ -25,7 +25,7 @@ public class ConnectController {
         String connectionString = "jdbc:mysql://" + adres.getText() + ":" + port.getText() + "/" + db.getText() + "?user=" + login.getText() + "&password=" + password.getText();
         System.out.println(connectionString);
         try {
-            connection = new DbConnection(login.getText(), password.getText(), "mysql", adres.getText(), db.getText(), port.getText());
+            connection = new DbConnection();
             connection.getConnection();
             connectionResults.setText("Połączono!");
             //wait(2000);
