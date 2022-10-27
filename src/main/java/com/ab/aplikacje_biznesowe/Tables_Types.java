@@ -73,8 +73,11 @@ public class Tables_Types {
                     ", groupId=" + groupId +
                     '}';
         }
-    }
 
+        public void toTableRow() {
+            System.out.printf("| %2d | %12s | %10s | %15s | %8s | %2d |%n", id, lastName, firstName, address, city, groupId);
+        }
+    }
     public static class Grades {
         private int id;
         private int studentId;
@@ -169,6 +172,10 @@ public class Tables_Types {
                     "id=" + id +
                     ", name='" + group_name + '\'' +
                     '}';
+        }
+
+        public void toTableRow() {
+            System.out.printf("| %2d | %12s |%n", id, group_name);
         }
     }
 
@@ -268,4 +275,5 @@ public class Tables_Types {
                     '}';
         }
     }
+
 }

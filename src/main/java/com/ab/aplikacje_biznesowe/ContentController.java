@@ -1,26 +1,18 @@
 package com.ab.aplikacje_biznesowe;
 
-import java.lang.reflect.Type;
 import java.sql.*;
 
-import javafx.application.Application;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.sql.ResultSet;
-import java.util.ArrayList;
 
 import static com.ab.aplikacje_biznesowe.HelloApplication.connection;
 
@@ -42,6 +34,7 @@ public class ContentController {
         try {
             while(rs.next()){
                 Tables_Types.User us = new Tables_Types.User(rs);
+                rs.updateString("last_name", "asdasd");
                 table.getItems().add(us);
                 System.out.println(us.toString());
             }
@@ -93,11 +86,11 @@ public class ContentController {
     }
 
     public void initialize() {
-        ResultSet users = connection.query("SELECT * FROM users;");
-        ResultSet subjects = connection.query("SELECT * FROM subjects;");
-        ResultSet messages = connection.query("SELECT * FROM messages;");
-        ResultSet groups = connection.query("SELECT * FROM groups;");
-        ResultSet grades = connection.query("SELECT * FROM grades;");
+        ResultSet users = connection.select_query("SELECT * FROM users;");
+        ResultSet subjects = connection.select_query("SELECT * FROM subjects;");
+        ResultSet messages = connection.select_query("SELECT * FROM messages;");
+        ResultSet groups = connection.select_query("SELECT * FROM groups;");
+        ResultSet grades = connection.select_query("SELECT * FROM grades;");
 
         parseTable(subjects, subjects_table);
         parseTable(messages, messages_table);
