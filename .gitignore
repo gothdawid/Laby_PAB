@@ -65,5 +65,7 @@ crashlytics-build.properties
 .project
 .settings/
 target/
+target/*
 /target/**
 */target/**
+/MYSQL-DB/*
