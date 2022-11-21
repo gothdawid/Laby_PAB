@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Tables_Types {
+
     public static class Users extends Table {
         public Users(String sql) {
             super(sql);
@@ -24,8 +25,19 @@ public class Tables_Types {
                 rs.updateString("address", scanner.nextLine());
                 System.out.print("Podaj miasto: ");
                 rs.updateString("city", scanner.nextLine());
+                //show groups
+
+                Tables_Types.Groups groups = new Tables_Types.Groups("SELECT * FROM groups");
+                groups.printAll();
+
                 System.out.print("Podaj id grupy: ");
-                rs.updateInt("group_id", scanner.nextInt());
+                int group_id = scanner.nextInt();
+                if (groups.checkId(group_id)) {
+                    rs.updateInt("group_id", group_id);
+                } else {
+                    System.out.println("Nie ma takiego id!");
+                    throw new SQLException();
+                }
                 rs.insertRow();
                 rs.moveToInsertRow();
                 System.out.println("Pomyślnie dodano użytkownika!");
@@ -58,6 +70,8 @@ public class Tables_Types {
             int id = scanner.nextInt();
             try {
                 goToRowId(id);
+                Groups groups = new Groups("SELECT * FROM groups");
+
                 System.out.println("Wybierz co chcesz edytować:");
                 System.out.println("1. Imię");
                 System.out.println("2. Nazwisko");
@@ -84,8 +98,15 @@ public class Tables_Types {
                     String city = scanner.next();
                     rs.updateString("city", city);
                 } else if (edit == 5) {
+                    groups.printAll();
                     System.out.print("Podaj id grupy: ");
                     int group_id = scanner.nextInt();
+                    if (groups.checkId(group_id)) {
+                        rs.updateInt("group_id", group_id);
+                    } else {
+                        System.out.println("Nie ma takiego id!");
+                        throw new SQLException();
+                    }
                     rs.updateInt("group_id", group_id);
                 } else if (edit == 6) {
                     System.out.print("Podaj imie: ");
@@ -96,10 +117,15 @@ public class Tables_Types {
                     String address = scanner.next();
                     System.out.print("Podaj miasto: ");
                     String city = scanner.next();
-                    //pobieranie listy grup
-
+                    groups.printAll();
                     System.out.print("Podaj id grupy: ");
                     int group_id = scanner.nextInt();
+                    if (groups.checkId(group_id)) {
+                        rs.updateInt("group_id", group_id);
+                    } else {
+                        System.out.println("Nie ma takiego id!");
+                        throw new SQLException();
+                    }
                     rs.updateString("first_name", name);
                     rs.updateString("last_name", surname);
                     rs.updateString("address", address);
@@ -145,6 +171,7 @@ public class Tables_Types {
         @Override
         public void add() {
             Scanner scanner = new Scanner(System.in);
+
             try {
                 rs.moveToInsertRow();
                 System.out.print("Podaj nazwę grupy: ");
@@ -216,8 +243,17 @@ public class Tables_Types {
                 rs.moveToInsertRow();
                 System.out.print("Podaj nazwę przedmiotu: ");
                 rs.updateString("name", scanner.nextLine());
+                Users users = new Users("SELECT * FROM users");
+                users.printAll();
+
                 System.out.println("Podaj id nauczyciela: ");
-                rs.updateInt("teacher_id", scanner.nextInt());
+                int teacher_id = scanner.nextInt();
+                if (users.checkId(teacher_id)) {
+                    rs.updateInt("teacher_id", teacher_id);
+                } else {
+                    System.out.println("Nie ma takiego id!");
+                    throw new SQLException();
+                }
                 rs.insertRow();
                 rs.moveToInsertRow();
                 System.out.println("Pomyślnie dodano przedmiot!");
@@ -250,9 +286,18 @@ public class Tables_Types {
             try {
                 goToRowId(id);
                 System.out.print("Podaj nazwę przedmiotu: ");
-                rs.updateString("name", scanner.nextLine());
+                rs.updateString("name", scanner.next());
+                Users users = new Users("SELECT * FROM users");
+                users.printAll();
                 System.out.println("Podaj id nauczyciela: ");
-                rs.updateInt("teacher_id", scanner.nextInt());
+                int teacher_id = scanner.nextInt();
+                if (users.checkId(teacher_id)) {
+                    rs.updateInt("teacher_id", teacher_id);
+                } else {
+                    System.out.println("Nie ma takiego id!");
+                    throw new SQLException();
+                }
+
                 rs.updateRow();
                 System.out.println("Pomyślnie edytowano przedmiot!");
             }
@@ -288,10 +333,24 @@ public class Tables_Types {
                 rs.moveToInsertRow();
                 System.out.print("Podaj treść wiadomości: ");
                 rs.updateString("message", scanner.nextLine());
+                Users users = new Users("SELECT * FROM users");
+                users.printAll();
                 System.out.println("Podaj id nadawcy: ");
-                rs.updateInt("sender_id", scanner.nextInt());
+                int sender_id = scanner.nextInt();
+                if (users.checkId(sender_id)) {
+                    rs.updateInt("sender_id", sender_id);
+                } else {
+                    System.out.println("Nie ma takiego id!");
+                    throw new SQLException();
+                }
                 System.out.println("Podaj id odbiorcy: ");
-                rs.updateInt("receiver_id", scanner.nextInt());
+                int receiver_id = scanner.nextInt();
+                if (users.checkId(receiver_id)) {
+                    rs.updateInt("receiver_id", receiver_id);
+                } else {
+                    System.out.println("Nie ma takiego id!");
+                    throw new SQLException();
+                }
                 rs.insertRow();
                 rs.moveToInsertRow();
                 System.out.println("Pomyślnie dodano wiadomość!");
@@ -323,11 +382,25 @@ public class Tables_Types {
             try {
                 goToRowId(id);
                 System.out.print("Podaj treść wiadomości: ");
-                rs.updateString("message", scanner.nextLine());
+                rs.updateString("message", scanner.next());
+                Users users = new Users("SELECT * FROM users");
+                users.printAll();
                 System.out.println("Podaj id nadawcy: ");
-                rs.updateInt("sender_id", scanner.nextInt());
+                int sender_id = scanner.nextInt();
+                if (users.checkId(sender_id)) {
+                    rs.updateInt("sender_id", sender_id);
+                } else {
+                    System.out.println("Nie ma takiego id!");
+                    throw new SQLException();
+                }
                 System.out.println("Podaj id odbiorcy: ");
-                rs.updateInt("receiver_id", scanner.nextInt());
+                int receiver_id = scanner.nextInt();
+                if (users.checkId(receiver_id)) {
+                    rs.updateInt("receiver_id", receiver_id);
+                } else {
+                    System.out.println("Nie ma takiego id!");
+                    throw new SQLException();
+                }
                 rs.updateRow();
                 System.out.println("Pomyślnie edytowano wiadomość!");
             } catch (SQLException e) {
@@ -360,13 +433,36 @@ public class Tables_Types {
         public void add() {
             Scanner scanner = new Scanner(System.in);
             try {
+                Users users = new Users("SELECT * FROM users");
+
                 rs.moveToInsertRow();
+                users.printAll();
                 System.out.println("Podaj id nauczyciela: ");
-                rs.updateInt("teacher_id", scanner.nextInt());
+                int teacher_id = scanner.nextInt();
+                if (users.checkId(teacher_id)) {
+                    rs.updateInt("teacher_id", teacher_id);
+                } else {
+                    System.out.println("Nie ma takiego id!");
+                    throw new SQLException();
+                }
                 System.out.println("Podaj id ucznia: ");
-                rs.updateInt("student_id", scanner.nextInt());
+                int student_id = scanner.nextInt();
+                if (users.checkId(student_id)) {
+                    rs.updateInt("student_id", student_id);
+                } else {
+                    System.out.println("Nie ma takiego id!");
+                    throw new SQLException();
+                }
+                Subjects subjects = new Subjects("SELECT * FROM subjects");
+                subjects.printAll();
                 System.out.println("Podaj id przedmiotu: ");
-                rs.updateInt("subject_id", scanner.nextInt());
+                int subject_id = scanner.nextInt();
+                if (subjects.checkId(subject_id)) {
+                    rs.updateInt("subject_id", subject_id);
+                } else {
+                    System.out.println("Nie ma takiego id!");
+                    throw new SQLException();
+                }
                 System.out.println("Podaj ocenę: ");
                 rs.updateInt("grade", scanner.nextInt());
                 rs.insertRow();
@@ -399,12 +495,34 @@ public class Tables_Types {
             int id = scanner.nextInt();
             try {
                 goToRowId(id);
+                Users users = new Users("SELECT * FROM users");
+                users.printAll();
                 System.out.println("Podaj id nauczyciela: ");
-                rs.updateInt("teacher_id", scanner.nextInt());
+                int teacher_id = scanner.nextInt();
+                if (users.checkId(teacher_id)) {
+                    rs.updateInt("teacher_id", teacher_id);
+                } else {
+                    System.out.println("Nie ma takiego id!");
+                    throw new SQLException();
+                }
                 System.out.println("Podaj id ucznia: ");
-                rs.updateInt("student_id", scanner.nextInt());
+                int student_id = scanner.nextInt();
+                if (users.checkId(student_id)) {
+                    rs.updateInt("student_id", student_id);
+                } else {
+                    System.out.println("Nie ma takiego id!");
+                    throw new SQLException();
+                }
+                Subjects subjects = new Subjects("SELECT * FROM subjects");
+                subjects.printAll();
                 System.out.println("Podaj id przedmiotu: ");
-                rs.updateInt("subject_id", scanner.nextInt());
+                int subject_id = scanner.nextInt();
+                if (subjects.checkId(subject_id)) {
+                    rs.updateInt("subject_id", subject_id);
+                } else {
+                    System.out.println("Nie ma takiego id!");
+                    throw new SQLException();
+                }
                 System.out.println("Podaj ocenę: ");
                 rs.updateInt("grade", scanner.nextInt());
                 rs.updateRow();
@@ -430,3 +548,4 @@ public class Tables_Types {
         }
     }
 }
+

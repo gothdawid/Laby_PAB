@@ -12,12 +12,12 @@
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Połącz się z bazą danych:" />
-   <TextField fx:id="adres" promptText="adres" text="localhost" />
-   <TextField fx:id="port" promptText="port" text="3306" />
-   <TextField fx:id="db" promptText="baza danych" text="edziennik" />
-   <TextField fx:id="login" promptText="login" />
-   <PasswordField fx:id="password" promptText="hasło" />
+    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Połącz się z bazą danych:" />
+    <TextField fx:id="adres" promptText="adres" text="localhost" />
+    <TextField fx:id="port" promptText="port" text="3306" />
+    <TextField fx:id="db" promptText="baza danych" text="edziennik" />
+    <TextField fx:id="login" promptText="login" />
+    <PasswordField fx:id="password" promptText="hasło" />
     <Button onAction="#onConnectButtonClick" text="Połącz" />
 
     <Label fx:id="connectionResults" prefHeight="17.0" prefWidth="189.0" textAlignment="CENTER" />

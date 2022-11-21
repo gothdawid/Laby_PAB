@@ -22,14 +22,12 @@ public class ConnectController {
 
     @FXML
     protected void onConnectButtonClick() {
-        String connectionString = "jdbc:mysql://" + adres.getText() + ":" + port.getText() + "/" + db.getText() + "?user=" + login.getText() + "&password=" + password.getText();
-        System.out.println(connectionString);
         try {
-            connection = new DbConnection();
+            connection = new DbConnection(adres.getText(), port.getText(),  db.getText(), login.getText(), password.getText(), "mysql");
             connection.getConnection();
             connectionResults.setText("Połączono!");
-            //wait(2000);
-            Scene newScene = new Scene(FXMLLoader.load(HelloApplication.class.getResource("content-view.fxml")));
+
+            Scene newScene = new Scene(FXMLLoader.load(HelloApplication.class.getResource("main-view.fxml")));
             Stage stage = (Stage) connectionResults.getScene().getWindow();
             stage.setScene(newScene);
         } catch (Exception e) {

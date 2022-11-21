@@ -10,14 +10,13 @@ public class DbConnection implements IDbConnection {
     private Connection connection;
 
     public DbConnection() {
-        String rootPath = Thread.currentThread().getContextClassLoader().getResource("db.properties").getPath();
-        String appConfigPath = rootPath + "";
         Properties appProps = new Properties();
         try {
-            appProps.load(new FileInputStream(appConfigPath));
+            appProps.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("db.properties"));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
+
         String login = appProps.getProperty("login");
         String password = appProps.getProperty("password");
         String ip = appProps.getProperty("ip");
@@ -26,6 +25,12 @@ public class DbConnection implements IDbConnection {
 
         connectionString = "jdbc:mysql://" + ip + ":" + port + "/" + database + "?user=" + login + "&password=" + password;
     }
+
+    public DbConnection(String ip, String port, String database, String login, String password, String driver) {
+        connectionString = "jdbc:" + driver + "://" + ip + ":" + port + "/" + database + "?user=" + login + "&password=" + password;
+    }
+
+
 
     @Override
     public Connection getConnection() {

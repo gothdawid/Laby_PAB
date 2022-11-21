@@ -24,8 +24,14 @@ public class TempApp {
             Tables_Types.Grades grades = new Tables_Types.Grades("SELECT * FROM grades");
             Tables_Types.Messages messages = new Tables_Types.Messages("SELECT * FROM messages");
             Tables_Types.Groups groups = new Tables_Types.Groups("SELECT * FROM groups");
+
+            //Table allTAbles = new Table();
+
+
+
             boolean returnToMenu = false;
             Table table = null;
+
             System.out.println("Wybierz tabelę:");
             System.out.println("1. Użytkownicy");
             System.out.println("2. Zajęcia");
