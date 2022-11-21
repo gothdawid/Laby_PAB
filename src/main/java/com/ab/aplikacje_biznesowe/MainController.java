@@ -28,10 +28,10 @@ public class MainController {
         }
 
         fillTable(users_table, users);
-        //fillTable(subjects_table, subjects);
-        //fillTable(grades_table, grades);
-        //fillTable(messages_table, messages);
-        //fillTable(groups_table, groups);
+        fillTable(subjects_table, subjects);
+        fillTable(grades_table, grades);
+        fillTable(messages_table, messages);
+        fillTable(groups_table, groups);
     }
 
     void fillTable(TableView table, Table data) {
@@ -39,6 +39,7 @@ public class MainController {
         table.getItems().clear();
         try {
             table.getColumns().addAll(data.getColumns());
+            table.setItems(data.getRows());
         }
         catch (Exception e) {
             System.out.println(e);
