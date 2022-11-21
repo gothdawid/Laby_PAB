@@ -11,6 +11,7 @@ import javafx.util.Callback;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class Table{
     ResultSet rs;
@@ -19,11 +20,28 @@ public abstract class Table{
         this.rs = HelloApplication.connection.select_query(sql);
     }
 
-    public abstract void add();
+    public void add(HashMap<String, String> data) throws SQLException {
+        rs.moveToInsertRow();
+        for (String key : data.keySet()) {
+            rs.updateString(key, data.get(key));
+        }
+        rs.insertRow();
+        rs.moveToInsertRow();
+    }
 
-    public abstract void del();
+    public void del(int id) throws SQLException {
+        goToRowId(id);
+        rs.deleteRow();
 
-    public abstract void edit();
+    }
+
+    public void edit(HashMap<String, String> data, int id) throws SQLException {
+        goToRowId(id);
+        for (String key : data.keySet()) {
+            rs.updateString(key, data.get(key));
+        }
+        rs.updateRow();
+    }
 
 
     public void goToRowId(int id) throws SQLException {
