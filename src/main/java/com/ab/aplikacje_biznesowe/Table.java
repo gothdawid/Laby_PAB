@@ -19,45 +19,11 @@ public abstract class Table{
         this.rs = HelloApplication.connection.select_query(sql);
     }
 
-    public void printAll() throws SQLException {
-        columnsNamesToString();
-    }
-
-    public void columnsNamesToString() throws SQLException {
-        String line = "";
-        String columnsNames = "";
-        int i ;
-
-        for (i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-            columnsNames += String.format("| %-20s", rs.getMetaData().getColumnName(i));
-            line += String.format("|%-20s", "---------------------");
-
-        }
-        System.out.println(line + "|");
-        System.out.println(columnsNames + "|");
-        System.out.println(line + "|");
-        rs.first();
-        do {
-            try {
-                for (i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-                    System.out.printf("| %-20s", rs.getString(i));
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            System.out.println("|");
-        } while (rs.next());
-        System.out.println(line + "|");
-
-    }
-
     public abstract void add();
 
     public abstract void del();
 
     public abstract void edit();
-
-
 
 
     public void goToRowId(int id) throws SQLException {
@@ -105,8 +71,8 @@ public abstract class Table{
     return columns.toArray();
     }
 
-    public ObservableList getRows() {
-        ObservableList<ObservableList> data = FXCollections.observableArrayList();
+    public ObservableList<ObservableList<String>> getRows() {
+        ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
         try {
             while (rs.next()) {
                 ObservableList<String> row = FXCollections.observableArrayList();
