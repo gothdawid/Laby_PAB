@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
 
@@ -15,6 +16,7 @@ import java.util.HashMap;
 
 public abstract class Table{
     ResultSet rs;
+    Button applyButton, deleteButton;
 
     public Table(String sql) {
         this.rs = HelloApplication.connection.select_query(sql);
@@ -30,19 +32,25 @@ public abstract class Table{
     }
 
     public void del(int id) throws SQLException {
-        goToRowId(id);
-        rs.deleteRow();
-
+        if(checkId(id)) {
+            rs.absolute(id);
+            rs.deleteRow();
+        } else {
+            throw new SQLException("No such id");
+        }
     }
 
     public void edit(HashMap<String, String> data, int id) throws SQLException {
-        goToRowId(id);
-        for (String key : data.keySet()) {
-            rs.updateString(key, data.get(key));
+        if(checkId(id)) {
+            goToRowId(id);
+            for (String key : data.keySet()) {
+                rs.updateString(key, data.get(key));
+            }
+            rs.updateRow();
+        } else {
+            throw new SQLException("No such id");
         }
-        rs.updateRow();
     }
-
 
     public void goToRowId(int id) throws SQLException {
         boolean found = false;
@@ -78,6 +86,10 @@ public abstract class Table{
                 TableColumn col = new TableColumn(rs.getMetaData().getColumnName(i + 1));
                 col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
                     public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
+                        //if param.getValue() returns null, then it will show null in the table
+                        if (param.getValue().get(j) == null) {
+                            return new SimpleStringProperty("");
+                        }
                         return new SimpleStringProperty(param.getValue().get(j).toString());
                     }
                 });
@@ -85,8 +97,18 @@ public abstract class Table{
             }
         } catch (SQLException e) {
             e.printStackTrace();
-    }
-    return columns.toArray();
+        }
+        TableColumn edit = new TableColumn("Edit");
+        TableColumn delete = new TableColumn("Delete");
+
+        edit.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, String>, Button>)
+                param ->
+                new Button("Edit")
+        );
+
+        columns.add(new TableColumn("Edit"));
+        columns.add(new TableColumn("Delete"));
+        return columns.toArray();
     }
 
     public ObservableList<ObservableList<String>> getRows() {
@@ -97,7 +119,10 @@ public abstract class Table{
                 for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
                     row.add(rs.getString(i));
                 }
+                row.add("Edit");
+                row.add("Delete");
                 data.add(row);
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
