@@ -113,5 +113,50 @@ public class Tables_Types {
             }
         }
     }
+
+    public static class Room extends Table {
+        public Room(String sql) {
+            super(sql);
+        }
+
+        @Override
+        public void toStringRow(){
+            int id, number;
+            String name;
+            try {
+                id = rs.getInt("id");
+                name = rs.getString("name");
+                number = rs.getInt("number");
+                System.out.printf("| %2d | %12s | %2d |%n", id, name, number);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static class Schedule extends Table {
+        public Schedule(String sql) {
+            super(sql);
+        }
+
+        @Override
+        public void toStringRow(){
+            int id, subject_id, room_id, teacher_id, group_id;
+            String day, start_time, end_time;
+            try {
+                id = rs.getInt("id");
+                day = rs.getString("day");
+                start_time = rs.getString("start_time");
+                end_time = rs.getString("end_time");
+                subject_id = rs.getInt("subject_id");
+                room_id = rs.getInt("room_id");
+                teacher_id = rs.getInt("teacher_id");
+                group_id = rs.getInt("group_id");
+                System.out.printf("| %2d | %12s | %12s | %12s | %2d | %2d | %2d | %2d |%n", id, day, start_time, end_time, subject_id, room_id, teacher_id, group_id);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
 
