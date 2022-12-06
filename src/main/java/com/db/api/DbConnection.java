@@ -60,7 +60,7 @@ public class DbConnection {
     public ResultSet executeQuery(String query) {
         ResultSet result;
         try {
-            PreparedStatement pS =  connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement pS =  connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS, ResultSet.CONCUR_UPDATABLE);
             result = pS.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();

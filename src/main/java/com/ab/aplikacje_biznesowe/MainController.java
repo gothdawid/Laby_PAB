@@ -13,12 +13,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class MainController {
     public BorderPane pane;
-    ResultSet users;
+    public static ResultSet users;
 
 
     public void about(ActionEvent actionEvent) {
@@ -90,18 +92,80 @@ public class MainController {
         nameColumn.setCellValueFactory(
                 new PropertyValueFactory<User, String>("first_name")
         );
+        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        nameColumn.setOnEditCommit(
+                (TableColumn.CellEditEvent<User, String> t) -> {
+                    try {
+                        ((User) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setFirst_name(t.getNewValue());
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
         surnameColumn.setCellValueFactory(
                 new PropertyValueFactory<User, String>("last_name")
+        );
+        surnameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        surnameColumn.setOnEditCommit(
+                (TableColumn.CellEditEvent<User, String> t) -> {
+                    try {
+                        ((User) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setLast_name(t.getNewValue());
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
         );
         addressColumn.setCellValueFactory(
                 new PropertyValueFactory<User, String>("address")
         );
+        addressColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        addressColumn.setOnEditCommit(
+                (TableColumn.CellEditEvent<User, String> t) -> {
+                    try {
+                        ((User) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setAddress(t.getNewValue());
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
         cityColumn.setCellValueFactory(
                 new PropertyValueFactory<User, String>("city")
         );
+        cityColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        cityColumn.setOnEditCommit(
+                (TableColumn.CellEditEvent<User, String> t) -> {
+                    try {
+                        ((User) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setCity(t.getNewValue());
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
+
         groupColumn.setCellValueFactory(
                 new PropertyValueFactory<User, Integer>("group_id")
         );
+        groupColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        groupColumn.setOnEditCommit(
+                (TableColumn.CellEditEvent<User, Integer> t) -> {
+                    try {
+                        ((User) t.getTableView().getItems().get(
+                                t.getTablePosition().getRow())
+                        ).setGroup_id(t.getNewValue());
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
+
         createdAtColumn.setCellFactory(
                 TextFieldTableCell.forTableColumn()
         );
@@ -110,16 +174,43 @@ public class MainController {
         );
         createdAtColumn.setOnEditCommit(
                 (TableColumn.CellEditEvent<User, String> t) -> {
-                    ((User) t.getTableView().getItems().get(
-                            t.getTablePosition().getRow())
-                    ).setCreatedAt(t.getNewValue());
+                    try {
+                        ((User) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCreatedAt(t.getNewValue());
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
         );
         updatedAtColumn.setCellValueFactory(
                 new PropertyValueFactory<User, String>("updatedAt")
         );
+        updatedAtColumn.setCellFactory(
+                TextFieldTableCell.forTableColumn()
+        );
+        updatedAtColumn.setOnEditCommit(
+                (TableColumn.CellEditEvent<User, String> t) -> {
+                    try {
+                        ((User) t.getTableView().getItems().get(t.getTablePosition().getRow())).setUpdatedAt(t.getNewValue());
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+        );
+
         passwordColumn.setCellValueFactory(
                 new PropertyValueFactory<User, String>("password")
+        );
+        passwordColumn.setCellFactory(
+                TextFieldTableCell.forTableColumn()
+        );
+        passwordColumn.setOnEditCommit(
+                (TableColumn.CellEditEvent<User, String> t) -> {
+                    try {
+                        ((User) t.getTableView().getItems().get(t.getTablePosition().getRow())).setPassword(t.getNewValue());
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
         );
 
         table.getColumns().addAll(idColumn, nameColumn, surnameColumn, addressColumn, cityColumn, groupColumn, createdAtColumn, updatedAtColumn, passwordColumn);
