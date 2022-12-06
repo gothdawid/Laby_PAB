@@ -1,6 +1,5 @@
 package com.ab.aplikacje_biznesowe;
 
-import com.db.api.IDbConnection;
 import com.db.api.DbConnection;
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -34,6 +33,5 @@ public class ConnectController {
             connectionResults.setText("Błąd połączenia!");
             System.out.println(e.getMessage());
         }
-
     }
 }

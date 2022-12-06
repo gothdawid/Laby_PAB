@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
-public class DbConnection implements IDbConnection {
+public class DbConnection {
     private final String connectionString;
     private Connection connection;
 
@@ -30,9 +30,6 @@ public class DbConnection implements IDbConnection {
         connectionString = "jdbc:" + driver + "://" + ip + ":" + port + "/" + database + "?user=" + login + "&password=" + password;
     }
 
-
-
-    @Override
     public Connection getConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
@@ -56,7 +53,11 @@ public class DbConnection implements IDbConnection {
             throw new RuntimeException(e);
         }
     }
-    public ResultSet select_query(String query) {
+
+
+
+
+    public ResultSet executeQuery(String query) {
         ResultSet result;
         try {
             PreparedStatement pS =  connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -67,19 +68,5 @@ public class DbConnection implements IDbConnection {
         }
         return result;
     }
-
-    public ResultSet query(String query) {
-        ResultSet result;
-        try {
-            Statement pS =  connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE);
-            result = pS.executeQuery(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return result;
-    }
-
 }
 

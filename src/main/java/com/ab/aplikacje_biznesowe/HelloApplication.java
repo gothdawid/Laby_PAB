@@ -1,6 +1,6 @@
 package com.ab.aplikacje_biznesowe;
 
-import com.db.api.IDbConnection;
+import com.db.api.DbConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,8 +10,7 @@ import java.io.IOException;
 
 public class HelloApplication extends Application {
     static Scene connect_Scene;
-    public static IDbConnection connection;
-
+    public static DbConnection connection;
 
     @Override
     public void start(Stage stage) throws IOException {

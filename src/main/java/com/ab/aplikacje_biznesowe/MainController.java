@@ -1,26 +1,24 @@
 package com.ab.aplikacje_biznesowe;
 
-import com.db.api.DbConnection;
-import com.db.api.IDbConnection;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.sql.ResultSet;
+
 public class MainController {
-
-    public void initialize() {
-        try {
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
+    public BorderPane pane;
+    ResultSet users;
 
 
     public void about(ActionEvent actionEvent) {
@@ -39,6 +37,99 @@ public class MainController {
         dialog.setTitle("O aplikacji");
         dialog.showAndWait();
 
+    }
+
+    //initialize
+    public void initialize(){
+        loadUsers(null);
+    }
+
+    public void loadUsers(ActionEvent actionEvent) {
+        int i = 0;
+        if (i==0) {users = HelloApplication.connection.executeQuery("SELECT * FROM user");}
+        i++;
+        ObservableList<User> usersList = FXCollections.observableArrayList();
+
+        TableView<User> table = new TableView<>();
+        table.setEditable(true);
+
+        TableColumn<User, Integer> idColumn = new TableColumn<>("ID");
+        TableColumn<User, String> nameColumn = new TableColumn<>("Imię");
+        TableColumn<User, String> surnameColumn = new TableColumn<>("Nazwisko");
+        TableColumn<User, String> addressColumn = new TableColumn<>("Adres");
+        TableColumn<User, String> cityColumn = new TableColumn<>("Miasto");
+        TableColumn<User, Integer> groupColumn = new TableColumn<>("Grupa");
+        TableColumn<User, String> createdAtColumn = new TableColumn<>("Utworzono");
+        TableColumn<User, String> updatedAtColumn = new TableColumn<>("Aktualizacja");
+        TableColumn<User, String> passwordColumn = new TableColumn<>("Hasło");
+
+        usersList.clear();
+        try {
+            while (users.next()) {
+                usersList.add(new User(
+                                users.getInt("id"),
+                                users.getString("first_name"),
+                                users.getString("last_name"),
+                                users.getString("address"),
+                                users.getString("city"),
+                                users.getInt("group_id"),
+                                users.getString("avatar"),
+                                users.getBoolean("isTeacher"),
+                                users.getString("createdAt"),
+                                users.getString("updatedAt"),
+                                users.getString("password")
+                        ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        idColumn.setCellValueFactory(
+                new PropertyValueFactory<User, Integer>("id")
+        );
+        nameColumn.setCellValueFactory(
+                new PropertyValueFactory<User, String>("first_name")
+        );
+        surnameColumn.setCellValueFactory(
+                new PropertyValueFactory<User, String>("last_name")
+        );
+        addressColumn.setCellValueFactory(
+                new PropertyValueFactory<User, String>("address")
+        );
+        cityColumn.setCellValueFactory(
+                new PropertyValueFactory<User, String>("city")
+        );
+        groupColumn.setCellValueFactory(
+                new PropertyValueFactory<User, Integer>("group_id")
+        );
+        createdAtColumn.setCellFactory(
+                TextFieldTableCell.forTableColumn()
+        );
+        createdAtColumn.setCellValueFactory(
+                new PropertyValueFactory<User, String>("createdAt")
+        );
+        createdAtColumn.setOnEditCommit(
+                (TableColumn.CellEditEvent<User, String> t) -> {
+                    ((User) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                    ).setCreatedAt(t.getNewValue());
+                }
+        );
+        updatedAtColumn.setCellValueFactory(
+                new PropertyValueFactory<User, String>("updatedAt")
+        );
+        passwordColumn.setCellValueFactory(
+                new PropertyValueFactory<User, String>("password")
+        );
+
+        table.getColumns().addAll(idColumn, nameColumn, surnameColumn, addressColumn, cityColumn, groupColumn, createdAtColumn, updatedAtColumn, passwordColumn);
+        table.setItems(usersList);
+        //add table after dataTable
+        pane.getChildren().clear();
+        pane.setCenter(table);
+    }
+
+    public void addRow(ActionEvent actionEvent) {
     }
 }
 
