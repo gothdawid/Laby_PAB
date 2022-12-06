@@ -1,6 +1,5 @@
 package com.ab.aplikacje_biznesowe;
 
-import javax.sql.RowSet;
 import java.sql.SQLException;
 
 public class User {
@@ -15,8 +14,9 @@ public class User {
     private String createdAt;
     private String updatedAt;
     private String password;
+    private Boolean checked;
 
-    public User(Integer id, String first_name, String last_name, String address, String city, Integer group_id, String Avatar, Boolean isTeacher, String createdAt, String updatedAt, String password) {
+    public User(Integer id, String first_name, String last_name, String address, String city, Integer group_id, String Avatar, Boolean isTeacher, String createdAt, String updatedAt, String password, boolean checked) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -28,6 +28,7 @@ public class User {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.password = password;
+        this.checked = checked;
     }
 
     public void goToRowId(int id) throws SQLException {
@@ -166,4 +167,13 @@ public class User {
         MainController.users.updateString("password", password);
         MainController.users.updateRow();
     }
+
+    public Boolean getChecked() {
+        return checked;
+    }
+
+    public void setChecked(Boolean checked) {
+        this.checked = checked;
+    }
+
 }

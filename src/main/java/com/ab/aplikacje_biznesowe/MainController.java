@@ -1,10 +1,14 @@
 package com.ab.aplikacje_biznesowe;
 
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
@@ -13,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.util.converter.IntegerStringConverter;
 
 import java.sql.ResultSet;
@@ -55,6 +60,8 @@ public class MainController {
         TableView<User> table = new TableView<>();
         table.setEditable(true);
 
+
+        TableColumn<User, Boolean> checkboxColumn = new TableColumn<>("Zaznacz");
         TableColumn<User, Integer> idColumn = new TableColumn<>("ID");
         TableColumn<User, String> nameColumn = new TableColumn<>("Imię");
         TableColumn<User, String> surnameColumn = new TableColumn<>("Nazwisko");
@@ -79,12 +86,41 @@ public class MainController {
                                 users.getBoolean("isTeacher"),
                                 users.getString("createdAt"),
                                 users.getString("updatedAt"),
-                                users.getString("password")
+                                users.getString("password"),
+                                false
                         ));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+        checkboxColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<User, Boolean>, ObservableValue<Boolean>>() {
+            @Override
+            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<User, Boolean> userBooleanCellDataFeatures) {
+                User user = userBooleanCellDataFeatures.getValue();
+
+                SimpleBooleanProperty booleanProp = new SimpleBooleanProperty(user.getChecked());
+
+                // Add listener to handler change
+                booleanProp.addListener(new ChangeListener<Boolean>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                        user.setChecked(newValue);
+                    }
+                });
+                return booleanProp;
+            }
+        });
+        checkboxColumn.setCellFactory(CheckBoxTableCell.forTableColumn(checkboxColumn));
+        checkboxColumn.setEditable(true);
+        checkboxColumn.setOnEditCommit(
+                (TableColumn.CellEditEvent<User, Boolean> t) -> {
+                    ((User) t.getTableView().getItems().get(
+                            t.getTablePosition().getRow())
+                    ).setChecked(t.getNewValue());
+                });
+
 
         idColumn.setCellValueFactory(
                 new PropertyValueFactory<User, Integer>("id")
@@ -207,13 +243,20 @@ public class MainController {
                 (TableColumn.CellEditEvent<User, String> t) -> {
                     try {
                         ((User) t.getTableView().getItems().get(t.getTablePosition().getRow())).setPassword(t.getNewValue());
+                        //freach userslist
+                        for (User user : usersList) {
+                            if(user.getChecked()){
+                                //print user id
+                                System.out.println(user.getId());
+                            }
+                        }
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
                 }
         );
 
-        table.getColumns().addAll(idColumn, nameColumn, surnameColumn, addressColumn, cityColumn, groupColumn, createdAtColumn, updatedAtColumn, passwordColumn);
+        table.getColumns().addAll(checkboxColumn ,idColumn, nameColumn, surnameColumn, addressColumn, cityColumn, groupColumn, createdAtColumn, updatedAtColumn, passwordColumn);
         table.setItems(usersList);
         //add table after dataTable
         pane.getChildren().clear();
@@ -221,6 +264,7 @@ public class MainController {
     }
 
     public void addRow(ActionEvent actionEvent) {
+
     }
 }
 
