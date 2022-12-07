@@ -34,7 +34,7 @@
          <children>
             <ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="200.0">
                <buttons>
-                  <Button mnemonicParsing="false" onAction="#loadUsers" text="Użytkownicy" />
+                  <Button defaultButton="true" mnemonicParsing="false" onAction="#DownloadUsers" text="Użytkownicy" />
                   <Button mnemonicParsing="false" text="Button" />
                   <Button mnemonicParsing="false" text="Button" />
                   <Button mnemonicParsing="false" text="Button" />
@@ -43,7 +43,7 @@
             </ButtonBar>
             <BorderPane fx:id="pane" prefHeight="200.0" prefWidth="200.0">
                <top>
-                  <TableView prefHeight="280.0" prefWidth="900.0" maxHeight="280.0" BorderPane.alignment="CENTER">
+                  <TableView maxHeight="280.0" prefHeight="280.0" prefWidth="900.0" BorderPane.alignment="CENTER">
                     <columns>
                       <TableColumn prefWidth="75.0" text="C1" />
                       <TableColumn prefWidth="75.0" text="C2" />
@@ -52,12 +52,13 @@
                </top>
             </BorderPane>
             <Separator prefWidth="200.0" />
-            <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="28.0" prefWidth="900.0">
-               <children>
-                  <Button alignment="CENTER" defaultButton="true" mnemonicParsing="false" onAction="#addRow" prefHeight="25.0" prefWidth="218.0" text="Wstaw" />
-                  <Button alignment="CENTER" cancelButton="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="212.0" text="Wyczyść" />
-               </children>
-            </HBox>
+            <ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="200.0">
+               <buttons>
+                  <Button alignment="CENTER" cancelButton="true" minWidth="0.0" mnemonicParsing="false" onAction="#clearChecked" prefHeight="25.0" prefWidth="212.0" text="Wyczyść" />
+                  <Button alignment="CENTER" cancelButton="true" minWidth="0.0" mnemonicParsing="false" onAction="#deleteChecked" prefHeight="25.0" prefWidth="212.0" text="Usuń" />
+                  <Button alignment="CENTER" defaultButton="true" minWidth="0.0" mnemonicParsing="false" onAction="#addRow" prefHeight="25.0" prefWidth="218.0" text="Wstaw" />
+               </buttons>
+            </ButtonBar>
             <Separator prefWidth="200.0" />
             <HBox maxHeight="20" prefHeight="19.0" prefWidth="900.0">
                <children>
