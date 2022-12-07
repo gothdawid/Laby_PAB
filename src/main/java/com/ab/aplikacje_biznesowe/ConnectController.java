@@ -8,8 +8,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.w3c.dom.events.Event;
+
+import java.util.Objects;
+
+import static com.ab.aplikacje_biznesowe.HelloApplication.connect_Scene;
 import static com.ab.aplikacje_biznesowe.HelloApplication.connection;
 
 
@@ -18,6 +23,21 @@ public class ConnectController {
     public TextField login, db, port, adres;
     @FXML
     private Label connectionResults;
+
+    @FXML
+    public void initialize() {
+        //key handler on scene
+        login.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                password.requestFocus();
+            }
+        });
+        password.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                onConnectButtonClick();
+            }
+        });
+    }
 
     @FXML
     protected void onConnectButtonClick() {
