@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -26,6 +27,7 @@ import java.sql.SQLException;
 public class MainController {
     public BorderPane pane;
     public static ResultSet users;
+    public Text logger_out;
 
 
     public void about(ActionEvent actionEvent) {
@@ -48,7 +50,10 @@ public class MainController {
 
     //initialize
     public void initialize(){
+        HelloApplication.logger.addHandler(new MyHandler(logger_out));
+        HelloApplication.logger.info("Ładowanie widoku głównego");
         loadUsers(null);
+        HelloApplication.logger.info("Załadowano użytkowników");
     }
 
     public void loadUsers(ActionEvent actionEvent) {
@@ -101,14 +106,7 @@ public class MainController {
                 User user = userBooleanCellDataFeatures.getValue();
 
                 SimpleBooleanProperty booleanProp = new SimpleBooleanProperty(user.getChecked());
-
-                // Add listener to handler change
-                booleanProp.addListener(new ChangeListener<Boolean>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                        user.setChecked(newValue);
-                    }
-                });
+                booleanProp.addListener((observable, oldValue, newValue) -> user.setChecked(newValue));
                 return booleanProp;
             }
         });

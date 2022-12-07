@@ -9,14 +9,13 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ab.aplikacje_biznesowe.MainController">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ab.aplikacje_biznesowe.MainController">
     <MenuBar VBox.vgrow="NEVER">
         <Menu mnemonicParsing="false" text="File">
             <MenuItem disable="true" mnemonicParsing="false" text="Parse PDF…" />
@@ -44,7 +43,7 @@
             </ButtonBar>
             <BorderPane fx:id="pane" prefHeight="200.0" prefWidth="200.0">
                <top>
-                  <TableView prefHeight="278.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+                  <TableView prefHeight="280.0" prefWidth="900.0" maxHeight="280.0" BorderPane.alignment="CENTER">
                     <columns>
                       <TableColumn prefWidth="75.0" text="C1" />
                       <TableColumn prefWidth="75.0" text="C2" />
@@ -53,33 +52,16 @@
                </top>
             </BorderPane>
             <Separator prefWidth="200.0" />
-            <HBox prefHeight="41.0" prefWidth="900.0">
-               <children>
-                  <HBox prefHeight="43.0" prefWidth="450.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" />
-                        <TextField />
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="15.0" prefWidth="757.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" />
-                        <TextField />
-                     </children>
-                  </HBox>
-               </children>
-            </HBox>
-            <Separator prefWidth="200.0" />
-            <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="45.0" prefWidth="900.0">
+            <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="28.0" prefWidth="900.0">
                <children>
                   <Button alignment="CENTER" defaultButton="true" mnemonicParsing="false" onAction="#addRow" prefHeight="25.0" prefWidth="218.0" text="Wstaw" />
                   <Button alignment="CENTER" cancelButton="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="212.0" text="Wyczyść" />
                </children>
             </HBox>
             <Separator prefWidth="200.0" />
-            <HBox prefHeight="19.0" prefWidth="900.0">
+            <HBox maxHeight="20" prefHeight="19.0" prefWidth="900.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" />
+                  <Text fx:id="logger_out" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" />
                </children>
             </HBox>
          </children>
