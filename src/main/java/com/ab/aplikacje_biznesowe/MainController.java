@@ -31,7 +31,8 @@ public class MainController {
     public BorderPane pane;
     public static ResultSet users;
     public Text logger_out;
-
+    ObservableList<User> usersList = FXCollections.observableArrayList();
+    TableView<User> table = new TableView<>();
 
     public void about(ActionEvent actionEvent) {
         Stage dialog = new Stage();
@@ -51,14 +52,141 @@ public class MainController {
 
     }
 
+    public void addRow(ActionEvent actionEvent) {
+        //open new window for add new user
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(HelloApplication.connect_Scene.getWindow());
+        dialog.setTitle("Add new user");
+
+        VBox dialogVbox = new VBox(20);
+        dialog.setScene(new Scene(dialogVbox, 600, 500));
+        Label label = new Label("Add new user");
+        label.setFont(new Font("Arial", 20));
+        TextField name = new TextField();
+        name.setPromptText("Name");
+        TextField surname = new TextField();
+        surname.setPromptText("Surname");
+        TextField address = new TextField();
+        address.setPromptText("Address");
+        TextField city = new TextField();
+        city.setPromptText("City");
+        TextField group = new TextField();
+        group.setPromptText("Group");
+        TextField password = new TextField();
+        password.setPromptText("Password");
+        CheckBox isTeacher = new CheckBox("Is teacher");
+
+
+
+
+        Button button = new Button("Add");
+        Button button2 = new Button("Cancel");
+        button2.setOnAction(e -> dialog.close());
+        button.setOnAction(e -> {
+            try {
+                users.moveToInsertRow();
+                users.updateString("first_name", name.getText());
+                users.updateString("last_name", surname.getText());
+                users.updateString("address", address.getText());
+                users.updateString("city", city.getText());
+                users.updateInt("group_id", Integer.parseInt(group.getText()));
+                users.updateBoolean("isTeacher", false);
+                users.updateString("password", password.getText());
+                users.insertRow();
+                loadUsers(null);
+
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            dialog.close();
+        });
+
+        dialogVbox.getChildren().addAll(label, name, surname, address, city, group, password, isTeacher, button, button2);
+
+        dialog.showAndWait();
+    }
+    public void deleteChecked(ActionEvent actionEvent) {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(HelloApplication.connect_Scene.getWindow());
+        dialog.setTitle("Delete users");
+        //Label: czy napewno chcesz skasować zaznaczonych użytkowników?
+        VBox dialogVbox = new VBox(20);
+        dialog.setScene(new Scene(dialogVbox, 300,400));
+        Label label = new Label("Czy napewno chcesz skasować zaznaczonych użytkowników?");
+        //wyświetl listę zaznaczonych użytkowników
+        ListView<String> list = new ListView<String>();
+        list.setPrefSize(300, 300);
+        ObservableList<String> items =FXCollections.observableArrayList ();
+        for (User user : usersList) {
+            if(user.getChecked()){
+                items.add(user.getId() +": " + user.getFirst_name() + " " + user.getLast_name());
+            }
+        }
+        list.setItems(items);
+        if (items.size() == 0){
+            //get selected users from table
+            table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            ObservableList<User> selectedUsers = table.getSelectionModel().getSelectedItems();
+            for (User user : selectedUsers) {
+                items.add(user.getId() +": " + user.getFirst_name() + " " + user.getLast_name());
+            }
+        }
+
+        ButtonBar buttonBar = new ButtonBar();
+        Button button = new Button("Delete");
+        Button button2 = new Button("Cancel");
+        buttonBar.getButtons().addAll(button, button2);
+
+        button2.setOnAction(e -> dialog.close());
+        button.setOnAction(e -> {
+            try {
+                for (User user : usersList) {
+                    if(user.getChecked()){
+                        users.beforeFirst();
+                        while (users.next()) {
+                            if (users.getInt("id") == user.getId()) {
+                                users.deleteRow();
+                                logger.info("Użytkownik " + user.getFirst_name() + " " + user.getLast_name() + "od id:" + user.getId() +" został usunięty.");
+                            }
+                        }
+                    }
+                }
+                DownloadUsers();
+                loadUsers(null);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            dialog.close();
+        });
+
+        dialogVbox.getChildren().addAll(label, list, buttonBar);
+        dialog.showAndWait();
+    }
+
     public void initialize(){
+        //add key handler
+        //if ctrl + i insert new row
+        //if ctrl + d delete row
+
+        pane.setOnKeyPressed(event -> {
+            if(event.isControlDown() && event.getCode().toString().equals("I")){
+                addRow(null);
+            }
+            if(event.isControlDown() && event.getCode().toString().equals("D")){
+                deleteChecked(null);
+            }
+        });
+
+
         logger.addHandler(new MyHandler(logger_out));
         logger.info("Ładowanie widoku głównego");
         loadUsers(null);
         logger.info("Załadowano użytkowników");
     }
-    ObservableList<User> usersList = FXCollections.observableArrayList();
-    TableView<User> table = new TableView<>();
+
     public void RefreshTable() throws SQLException {
         logger.info("Odświeżanie tabeli");
         //table.getItems().clear();
@@ -272,62 +400,6 @@ public class MainController {
     }
 
 
-    public void addRow(ActionEvent actionEvent) {
-        //open new window for add new user
-        Stage dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(HelloApplication.connect_Scene.getWindow());
-        dialog.setTitle("Add new user");
-
-        VBox dialogVbox = new VBox(20);
-        dialog.setScene(new Scene(dialogVbox, 600, 500));
-        Label label = new Label("Add new user");
-        label.setFont(new Font("Arial", 20));
-        TextField name = new TextField();
-        name.setPromptText("Name");
-        TextField surname = new TextField();
-        surname.setPromptText("Surname");
-        TextField address = new TextField();
-        address.setPromptText("Address");
-        TextField city = new TextField();
-        city.setPromptText("City");
-        TextField group = new TextField();
-        group.setPromptText("Group");
-        TextField password = new TextField();
-        password.setPromptText("Password");
-        CheckBox isTeacher = new CheckBox("Is teacher");
-
-
-
-
-        Button button = new Button("Add");
-        Button button2 = new Button("Cancel");
-        button2.setOnAction(e -> dialog.close());
-        button.setOnAction(e -> {
-            try {
-                users.moveToInsertRow();
-                users.updateString("first_name", name.getText());
-                users.updateString("last_name", surname.getText());
-                users.updateString("address", address.getText());
-                users.updateString("city", city.getText());
-                users.updateInt("group_id", Integer.parseInt(group.getText()));
-                users.updateBoolean("isTeacher", false);
-                users.updateString("password", password.getText());
-                users.insertRow();
-                loadUsers(null);
-
-
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-            dialog.close();
-        });
-
-        dialogVbox.getChildren().addAll(label, name, surname, address, city, group, password, isTeacher, button, button2);
-
-        dialog.showAndWait();
-    }
-
     public void clearChecked(ActionEvent actionEvent) {
         for (User user : usersList) {
             user.setChecked(false);
@@ -335,56 +407,7 @@ public class MainController {
         //RefreshTable();
         DownloadUsers();
     }
-    public void deleteChecked(ActionEvent actionEvent) {
-        Stage dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(HelloApplication.connect_Scene.getWindow());
-        dialog.setTitle("Delete users");
-        //Label: czy napewno chcesz skasować zaznaczonych użytkowników?
-        VBox dialogVbox = new VBox(20);
-        dialog.setScene(new Scene(dialogVbox, 300,400));
-        Label label = new Label("Czy napewno chcesz skasować zaznaczonych użytkowników?");
-        //wyświetl listę zaznaczonych użytkowników
-        ListView<String> list = new ListView<String>();
-        list.setPrefSize(300, 300);
-        ObservableList<String> items =FXCollections.observableArrayList ();
-        for (User user : usersList) {
-            if(user.getChecked()){
-                items.add(user.getId() +": " + user.getFirst_name() + " " + user.getLast_name());
-            }
-        }
-        list.setItems(items);
 
-        ButtonBar buttonBar = new ButtonBar();
-        Button button = new Button("Delete");
-        Button button2 = new Button("Cancel");
-        buttonBar.getButtons().addAll(button, button2);
 
-        button2.setOnAction(e -> dialog.close());
-        button.setOnAction(e -> {
-            try {
-                for (User user : usersList) {
-                    if(user.getChecked()){
-                        users.beforeFirst();
-                        while (users.next()) {
-                            if (users.getInt("id") == user.getId()) {
-                                users.deleteRow();
-                                logger.info("Użytkownik " + user.getFirst_name() + " " + user.getLast_name() + "od id:" + user.getId() +" został usunięty.");
-                            }
-                        }
-                    }
-                }
-                loadUsers(null);
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-            dialog.close();
-        });
-
-        dialogVbox.getChildren().addAll(label, list, buttonBar);
-        dialog.showAndWait();
-
-        DownloadUsers();
-    }
 }
 
