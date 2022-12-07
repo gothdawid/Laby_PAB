@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -262,7 +263,59 @@ public class MainController {
     }
 
     public void addRow(ActionEvent actionEvent) {
+        //open new window for add new user
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(HelloApplication.connect_Scene.getWindow());
+        dialog.setTitle("Add new user");
 
+        VBox dialogVbox = new VBox(20);
+        dialog.setScene(new Scene(dialogVbox, 600, 500));
+        Label label = new Label("Add new user");
+        label.setFont(new Font("Arial", 20));
+        TextField name = new TextField();
+        name.setPromptText("Name");
+        TextField surname = new TextField();
+        surname.setPromptText("Surname");
+        TextField address = new TextField();
+        address.setPromptText("Address");
+        TextField city = new TextField();
+        city.setPromptText("City");
+        TextField group = new TextField();
+        group.setPromptText("Group");
+        TextField password = new TextField();
+        password.setPromptText("Password");
+        CheckBox isTeacher = new CheckBox("Is teacher");
+
+
+
+
+        Button button = new Button("Add");
+        Button button2 = new Button("Cancel");
+        button2.setOnAction(e -> dialog.close());
+        button.setOnAction(e -> {
+            try {
+                users.moveToInsertRow();
+                users.updateString("first_name", name.getText());
+                users.updateString("last_name", surname.getText());
+                users.updateString("address", address.getText());
+                users.updateString("city", city.getText());
+                users.updateInt("group_id", Integer.parseInt(group.getText()));
+                users.updateBoolean("isTeacher", false);
+                users.updateString("password", password.getText());
+                users.insertRow();
+                loadUsers(null);
+
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            dialog.close();
+        });
+
+        dialogVbox.getChildren().addAll(label, name, surname, address, city, group, password, isTeacher, button, button2);
+
+        dialog.showAndWait();
     }
 }
 
