@@ -68,4 +68,3 @@ target/
 target/*
 /target/**
 */target/**
-/MYSQL-DB/*
