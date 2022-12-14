@@ -69,7 +69,6 @@ public class MainController {
 
 
     public void addRow(String na, String sur, String addr, String cit, String pass, Integer grid, Boolean iTeach) {
-        //open new window for add new user
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(HelloApplication.connect_Scene.getWindow());
@@ -192,9 +191,6 @@ public class MainController {
     }
 
     public void initialize(){
-        //add key handler
-        //if ctrl + i insert new row
-        //if ctrl + d delete row
 
         pane.setOnKeyPressed(event -> {
             if(event.isControlDown() && event.getCode().toString().equals("I")){
@@ -202,6 +198,9 @@ public class MainController {
             }
             if(event.isControlDown() && event.getCode().toString().equals("D")){
                 deleteChecked(null);
+            }
+            if(event.isControlDown() && event.getCode().toString().equals("C")){
+                addRow(table.getSelectionModel().getSelectedItem());
             }
         });
 
@@ -257,8 +256,6 @@ public class MainController {
             }
         });
         searchButton.addEventHandler(ActionEvent.ACTION, event -> {
-            //return if searchField is empty
-            //return if event is not enter or button click or mouse click
             if(!event.getEventType().equals(ActionEvent.ACTION)){
                 return;
             }
@@ -322,7 +319,6 @@ public class MainController {
                 addRow("", "", "", "", "", 0, false);
             });
             contextMenu.getItems().addAll(addItem, copyItem, deleteItem);
-            // Set context menu on row, but use a binding to make it only show for non-empty rows:
             row.contextMenuProperty().bind(
                     Bindings.when(row.emptyProperty())
                             .then((ContextMenu)null)
@@ -446,7 +442,6 @@ public class MainController {
                 (TableColumn.CellEditEvent<User, String> t) -> {
                     try {
                         ((User) t.getTableView().getItems().get(t.getTablePosition().getRow())).setPassword(t.getNewValue());
-                        //freach userslist
                         for (User user : usersList) {
                             if(user.getChecked()){
                                 //print user id
@@ -484,7 +479,6 @@ public class MainController {
                 }
         );
 
-
         table.getColumns().addAll(checkboxColumn ,idColumn, nameColumn, surnameColumn, addressColumn, cityColumn, groupColumn, createdAtColumn, updatedAtColumn, passwordColumn, isTeacherColumn);
 
         DownloadUsers();
@@ -495,10 +489,24 @@ public class MainController {
         for (User user : usersList) {
             user.setChecked(false);
         }
-        //RefreshTable();
         DownloadUsers();
     }
 
 
+    public void copyFromMenu(ActionEvent actionEvent) {
+        User us = table.getSelectionModel().getSelectedItem();
+        if (us == null) {
+            return;
+        }
+        addRow(us);
+    }
+
+    public void inserFromMenu(ActionEvent actionEvent) {
+        addRow("","","","","",0,false);
+    }
+
+    public void deleteFromMenu(ActionEvent actionEvent) {
+        deleteChecked(null);
+    }
 }
 

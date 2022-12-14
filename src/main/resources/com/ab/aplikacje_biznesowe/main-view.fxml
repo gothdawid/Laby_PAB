@@ -24,8 +24,10 @@
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Quit" />
         </Menu>
-        <Menu disable="true" mnemonicParsing="false" text="Edit">
-            <MenuItem mnemonicParsing="false" text="Copy" />
+        <Menu mnemonicParsing="false" text="Edit">
+            <MenuItem mnemonicParsing="false" onAction="#inserFromMenu" text="Wstaw (Ctrl + I)" />
+         <MenuItem mnemonicParsing="false" onAction="#copyFromMenu" text="Skopiuj (Ctrl + C)" />
+         <MenuItem mnemonicParsing="false" onAction="#deleteFromMenu" text="Skasuj (Ctrl + D)" />
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
             <MenuItem mnemonicParsing="false" onAction="#about" text="O aplikacji" />
@@ -46,14 +48,14 @@
                         <Button fx:id="searchButton" defaultButton="true" maxHeight="27.0" minHeight="27.0" mnemonicParsing="false" prefHeight="27.0" text="Wyszukaj" />
                      </buttons>
                   </ButtonBar>
-                  <ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="47.0" prefWidth="612.0">
+                  <ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="35.0" prefWidth="657.0">
                      <buttons>
                         <Button mnemonicParsing="false" onAction="#DownloadUsers" text="Użytkownicy" />
-                        <Button mnemonicParsing="false" text="Grupy" />
-                        <Button mnemonicParsing="false" text="Oceny" />
-                        <Button mnemonicParsing="false" text="Sale" />
-                        <Button mnemonicParsing="false" text="Zajecia" />
-                        <Button mnemonicParsing="false" text="Plan" />
+                        <Button disable="true" mnemonicParsing="false" text="Grupy" />
+                        <Button disable="true" mnemonicParsing="false" text="Oceny" />
+                        <Button disable="true" mnemonicParsing="false" text="Sale" />
+                        <Button disable="true" mnemonicParsing="false" text="Zajecia" />
+                        <Button disable="true" mnemonicParsing="false" text="Plan" />
                      </buttons>
                   </ButtonBar>
                </children>
