@@ -1,5 +1,6 @@
 package com.ab.aplikacje_biznesowe;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -57,7 +58,17 @@ public class MainController {
 
     }
 
-    public void addRow(ActionEvent actionEvent) {
+
+    public void addRow(ActionEvent actionEvent){
+        addRow("","","","","",0,false);
+    }
+
+    public void addRow(User user){
+        addRow(user.getFirst_name(),user.getLast_name(),user.getAddress(), user.getCity(), user.getPassword(), user.getGroup_id(), user.getTeacher());
+    }
+
+
+    public void addRow(String na, String sur, String addr, String cit, String pass, Integer grid, Boolean iTeach) {
         //open new window for add new user
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -70,17 +81,24 @@ public class MainController {
         label.setFont(new Font("Arial", 20));
         TextField name = new TextField();
         name.setPromptText("Name");
+        name.setText(na);
         TextField surname = new TextField();
         surname.setPromptText("Surname");
+        surname.setText(sur);
         TextField address = new TextField();
         address.setPromptText("Address");
+        address.setText(addr);
         TextField city = new TextField();
         city.setPromptText("City");
+        city.setText(cit);
         TextField group = new TextField();
         group.setPromptText("Group");
+        group.setText(grid.toString());
         TextField password = new TextField();
         password.setPromptText("Password");
+        password.setText(pass);
         CheckBox isTeacher = new CheckBox("Is teacher");
+        isTeacher.setSelected(iTeach);
 
 
 
@@ -180,7 +198,7 @@ public class MainController {
 
         pane.setOnKeyPressed(event -> {
             if(event.isControlDown() && event.getCode().toString().equals("I")){
-                addRow(null);
+                addRow("", "", "", "", "", 0, false);
             }
             if(event.isControlDown() && event.getCode().toString().equals("D")){
                 deleteChecked(null);
@@ -286,6 +304,33 @@ public class MainController {
         TableColumn<User, String> updatedAtColumn = new TableColumn<>("Aktualizacja");
         TableColumn<User, String> passwordColumn = new TableColumn<>("Hasło");
         TableColumn<User, Boolean> isTeacherColumn = new TableColumn<>("Nauczyciel");
+
+        //contex menu
+        table.setRowFactory(tv -> {
+            TableRow<User> row = new TableRow<>();
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem deleteItem = new MenuItem("Usuń");
+            MenuItem copyItem = new MenuItem("Kopiuj");
+            MenuItem addItem = new MenuItem("Dodaj");
+            deleteItem.setOnAction(event -> {
+                deleteChecked(null);
+            });
+            copyItem.setOnAction(event -> {
+                addRow(row.getItem());
+            });
+            addItem.setOnAction(event -> {
+                addRow("", "", "", "", "", 0, false);
+            });
+            contextMenu.getItems().addAll(addItem, copyItem, deleteItem);
+            // Set context menu on row, but use a binding to make it only show for non-empty rows:
+            row.contextMenuProperty().bind(
+                    Bindings.when(row.emptyProperty())
+                            .then((ContextMenu)null)
+                            .otherwise(contextMenu)
+            );
+            return row ;
+        });
+
 
         checkboxColumn.setCellValueFactory(userBooleanCellDataFeatures -> {
             User user = userBooleanCellDataFeatures.getValue();

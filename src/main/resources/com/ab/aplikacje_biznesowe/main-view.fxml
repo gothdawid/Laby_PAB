@@ -38,7 +38,7 @@
                <children>
                   <TextField fx:id="searchField" promptText="Wyszukaj">
                      <HBox.margin>
-                        <Insets left="5.0" top="5.0" />
+                        <Insets bottom="4.0" left="5.0" top="5.0" />
                      </HBox.margin>
                   </TextField>
                   <ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="47.0" prefWidth="78.0">
