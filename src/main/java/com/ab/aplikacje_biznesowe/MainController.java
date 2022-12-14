@@ -6,12 +6,15 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -31,6 +34,8 @@ public class MainController {
     public BorderPane pane;
     public static ResultSet users;
     public Text logger_out;
+    public Button searchButton;
+    public TextField searchField;
     ObservableList<User> usersList = FXCollections.observableArrayList();
     TableView<User> table = new TableView<>();
 
@@ -227,6 +232,45 @@ public class MainController {
 
     public void loadUsers(ActionEvent actionEvent) {
         int i = 0;
+        //searchField on enter
+        searchField.setOnKeyPressed(event -> {
+            if(event.getCode().equals(KeyCode.ENTER)){
+                searchButton.fire();
+            }
+        });
+        searchButton.addEventHandler(ActionEvent.ACTION, event -> {
+            //return if searchField is empty
+            //return if event is not enter or button click or mouse click
+            if(!event.getEventType().equals(ActionEvent.ACTION)){
+                return;
+            }
+            try {
+                usersList.clear();
+                users.beforeFirst();
+                while (users.next()) {
+                    if (users.getString("first_name").toLowerCase().contains(searchField.getText().toLowerCase()) || users.getString("last_name").toLowerCase().contains(searchField.getText().toLowerCase())) {
+                        usersList.add(new User(
+                                users.getInt("id"),
+                                users.getString("first_name"),
+                                users.getString("last_name"),
+                                users.getString("address"),
+                                users.getString("city"),
+                                users.getInt("group_id"),
+                                users.getString("avatar"),
+                                users.getBoolean("isTeacher"),
+                                users.getString("createdAt"),
+                                users.getString("updatedAt"),
+                                users.getString("password"),
+                                false
+                        ));
+                    }
+                }
+                RefreshTable();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
         users = HelloApplication.connection.executeQuery("SELECT * FROM user");
 
         table.setEditable(true);

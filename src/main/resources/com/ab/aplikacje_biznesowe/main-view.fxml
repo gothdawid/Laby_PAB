@@ -10,7 +10,7 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -36,21 +36,19 @@
          <children>
             <HBox maxHeight="40.0" prefHeight="40.0" prefWidth="900.0">
                <children>
-                  <TextArea maxHeight="27.0" minHeight="27.0" prefColumnCount="1" prefHeight="27.0" prefRowCount="1" prefWidth="191.0" promptText="Wyszukaj">
+                  <TextField fx:id="searchField" promptText="Wyszukaj">
                      <HBox.margin>
-                        <Insets left="6.0" top="8.0" />
+                        <Insets left="5.0" top="5.0" />
                      </HBox.margin>
-                     <padding>
-                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
-                     </padding></TextArea>
+                  </TextField>
                   <ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="47.0" prefWidth="78.0">
                      <buttons>
-                        <Button maxHeight="27.0" minHeight="27.0" mnemonicParsing="false" prefHeight="27.0" text="Wyszukaj" />
+                        <Button fx:id="searchButton" defaultButton="true" maxHeight="27.0" minHeight="27.0" mnemonicParsing="false" prefHeight="27.0" text="Wyszukaj" />
                      </buttons>
                   </ButtonBar>
                   <ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="47.0" prefWidth="612.0">
                      <buttons>
-                        <Button defaultButton="true" mnemonicParsing="false" onAction="#DownloadUsers" text="Użytkownicy" />
+                        <Button mnemonicParsing="false" onAction="#DownloadUsers" text="Użytkownicy" />
                         <Button mnemonicParsing="false" text="Grupy" />
                         <Button mnemonicParsing="false" text="Oceny" />
                         <Button mnemonicParsing="false" text="Sale" />
@@ -73,9 +71,9 @@
             <Separator prefWidth="200.0" />
             <ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="200.0">
                <buttons>
-                  <Button alignment="CENTER" cancelButton="true" minWidth="0.0" mnemonicParsing="false" onAction="#clearChecked" prefHeight="25.0" prefWidth="212.0" text="Wyczyść" />
-                  <Button alignment="CENTER" cancelButton="true" minWidth="0.0" mnemonicParsing="false" onAction="#deleteChecked" prefHeight="25.0" prefWidth="212.0" text="Usuń" />
-                  <Button alignment="CENTER" defaultButton="true" minWidth="0.0" mnemonicParsing="false" onAction="#addRow" prefHeight="25.0" prefWidth="218.0" text="Wstaw" />
+                  <Button alignment="CENTER" minWidth="0.0" mnemonicParsing="false" onAction="#clearChecked" prefHeight="25.0" prefWidth="212.0" text="Wyczyść" />
+                  <Button alignment="CENTER" minWidth="0.0" mnemonicParsing="false" onAction="#deleteChecked" prefHeight="25.0" prefWidth="212.0" text="Usuń" />
+                  <Button alignment="CENTER" minWidth="0.0" mnemonicParsing="false" onAction="#addRow" prefHeight="25.0" prefWidth="218.0" text="Wstaw" />
                </buttons>
             </ButtonBar>
             <Separator prefWidth="200.0" />
