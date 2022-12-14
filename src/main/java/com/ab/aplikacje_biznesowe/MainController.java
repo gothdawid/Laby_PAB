@@ -116,7 +116,7 @@ public class MainController {
                 users.updateString("address", address.getText());
                 users.updateString("city", city.getText());
                 users.updateInt("group_id", Integer.parseInt(group.getText()));
-                users.updateBoolean("isTeacher", false);
+                users.updateBoolean("isTeacher", isTeacher.isSelected());
                 users.updateString("password", password.getText());
                 users.insertRow();
                 loadUsers(null);
