@@ -16,7 +16,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -34,20 +36,36 @@ public class MainController {
     ObservableList<User> usersList = FXCollections.observableArrayList();
     TableView<User> table = new TableView<>();
 
+    public static final Font ITALIC_FONT =
+            Font.font(
+                    "Serif",
+                    FontPosture.ITALIC,
+                    Font.getDefault().getSize()
+            );
+
     public void about(ActionEvent actionEvent) {
         Stage dialog = new Stage();
-        Label label = new Label("Aplikacja do zarządzania szkołą");
+        Label label = new Label("E-Journal to dziennik elektroniczny, który służy do " +
+                "rejestru przebiegu nauczania. Aplikacja z pozniomu administratora" +
+                " pozwala na wstawianie, edytowanie oraz usuwanie uczniów i naczycieli.");
         Label label2 = new Label("Autorzy: ");
+        label2.setFont(ITALIC_FONT);
         Label label3 = new Label("Dawid Studziński");
+        label3.setFont(ITALIC_FONT);
         Label label4 = new Label("Joanna Wojtasińska");
+        label4.setFont(ITALIC_FONT);
         VBox layout = new VBox(10);
+
+        label.setWrapText(true);
+        dialog.setScene(new Scene(layout, 250, 180));
+        label.setMaxWidth(240);
+        label.setTextAlignment(TextAlignment.JUSTIFY);
 
         layout.getChildren().addAll(label, label2, label3, label4);
         layout.setStyle("-fx-alignment: center");
-        dialog.setScene(new Scene(layout, 200, 150));
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(HelloApplication.connect_Scene.getWindow());
-        dialog.setTitle("O aplikacji");
+        dialog.setTitle("E-Journal");
         dialog.showAndWait();
 
     }
