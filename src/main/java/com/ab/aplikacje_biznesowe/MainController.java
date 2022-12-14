@@ -314,6 +314,7 @@ public class MainController {
             });
             copyItem.setOnAction(event -> {
                 addRow(row.getItem());
+                System.out.println("Kopiuj");
             });
             addItem.setOnAction(event -> {
                 addRow("", "", "", "", "", 0, false);
