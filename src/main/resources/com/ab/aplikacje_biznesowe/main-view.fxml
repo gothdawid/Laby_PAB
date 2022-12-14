@@ -26,8 +26,8 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Edit">
             <MenuItem mnemonicParsing="false" onAction="#inserFromMenu" text="Wstaw (Ctrl + I)" />
-         <MenuItem mnemonicParsing="false" onAction="#copyFromMenu" text="Skopiuj (Ctrl + C)" />
-         <MenuItem mnemonicParsing="false" onAction="#deleteFromMenu" text="Skasuj (Ctrl + D)" />
+         <MenuItem mnemonicParsing="false" onAction="#copyFromMenu" text="Kopiuj (Ctrl + C)" />
+         <MenuItem mnemonicParsing="false" onAction="#deleteFromMenu" text="Usuń (Ctrl + D)" />
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
             <MenuItem mnemonicParsing="false" onAction="#about" text="O aplikacji" />

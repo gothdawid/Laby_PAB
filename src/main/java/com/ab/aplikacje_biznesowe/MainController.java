@@ -8,6 +8,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
@@ -16,9 +18,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
@@ -63,7 +63,7 @@ public class MainController {
         VBox layout = new VBox(10);
 
         label.setWrapText(true);
-        dialog.setScene(new Scene(layout, 250, 180));
+        dialog.setScene(new Scene(layout, 290, 180));
         label.setMaxWidth(240);
         label.setTextAlignment(TextAlignment.JUSTIFY);
 
@@ -90,38 +90,48 @@ public class MainController {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(HelloApplication.connect_Scene.getWindow());
-        dialog.setTitle("Add new user");
-
         VBox dialogVbox = new VBox(20);
-        dialog.setScene(new Scene(dialogVbox, 600, 500));
-        Label label = new Label("Add new user");
-        label.setFont(new Font("Arial", 20));
+        dialog.setTitle("Wstaw nowego użytkownika");
+
+        dialog.setScene(new Scene(dialogVbox, 420, 400));
+        Label label = new Label("Wstaw użytkownika");
+        label.setFont(new Font("Serif", 15));
         TextField name = new TextField();
-        name.setPromptText("Name");
+
+        HBox dialogHbox1 = new HBox(20);
+        name.setPromptText("Imię");
         name.setText(na);
         TextField surname = new TextField();
-        surname.setPromptText("Surname");
+        surname.setPromptText("Nazwisko");
         surname.setText(sur);
         TextField address = new TextField();
-        address.setPromptText("Address");
+        dialogHbox1.getChildren().addAll(name,surname);
+
+        HBox dialogHbox2 = new HBox(20);
+        address.setPromptText("Adres");
         address.setText(addr);
         TextField city = new TextField();
-        city.setPromptText("City");
+        city.setPromptText("Miasto");
         city.setText(cit);
         TextField group = new TextField();
-        group.setPromptText("Group");
+        dialogHbox2.getChildren().addAll(address,city);
+
+        HBox dialogHbox3 = new HBox(20);
+        group.setPromptText("Grupa");
         group.setText(grid.toString());
         TextField password = new TextField();
-        password.setPromptText("Password");
+        password.setPromptText("Hasło");
         password.setText(pass);
-        CheckBox isTeacher = new CheckBox("Is teacher");
+        dialogHbox3.getChildren().addAll(group,password);
+
+        CheckBox isTeacher = new CheckBox("Nauczyciel");
         isTeacher.setSelected(iTeach);
 
 
 
         HBox layout = new HBox(10);
-        Button button = new Button("Add");
-        Button button2 = new Button("Cancel");
+        Button button = new Button("Akceptuj");
+        Button button2 = new Button("Anuluj");
         layout.getChildren().addAll(button, button2);
 
         button2.setOnAction(e -> dialog.close());
@@ -145,7 +155,17 @@ public class MainController {
             dialog.close();
         });
 
-        dialogVbox.getChildren().addAll(label, name, surname, address, city, group, password, isTeacher, layout);
+        dialogVbox.setAlignment(Pos.CENTER);
+        dialogHbox1.setAlignment(Pos.CENTER);
+        dialogHbox2.setAlignment(Pos.CENTER);
+        dialogHbox3.setAlignment(Pos.CENTER);
+        layout.setAlignment(Pos.CENTER);
+
+        dialog.setMinWidth(400);
+        dialog.setMinHeight(360);
+
+
+        dialogVbox.getChildren().addAll(label, dialogHbox1, dialogHbox2, dialogHbox3, isTeacher, layout);
 
         dialog.showAndWait();
     }
@@ -153,11 +173,16 @@ public class MainController {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(HelloApplication.connect_Scene.getWindow());
-        dialog.setTitle("Delete users");
+        dialog.setTitle("Usuwanie");
         //Label: czy napewno chcesz skasować zaznaczonych użytkowników?
         VBox dialogVbox = new VBox(20);
-        dialog.setScene(new Scene(dialogVbox, 300,400));
+        dialog.setScene(new Scene(dialogVbox, 420,400));
         Label label = new Label("Czy napewno chcesz skasować zaznaczonych użytkowników?");
+        label.setFont(new Font("Serif", 13));
+
+        Insets insets = new Insets(10,20,10,20);
+        dialogVbox.setPadding(insets);
+
         //wyświetl listę zaznaczonych użytkowników
         ListView<String> list = new ListView<String>();
         list.setPrefSize(300, 300);
@@ -178,8 +203,8 @@ public class MainController {
         }
 
         ButtonBar buttonBar = new ButtonBar();
-        Button button = new Button("Delete");
-        Button button2 = new Button("Cancel");
+        Button button = new Button("Usuń");
+        Button button2 = new Button("Anuluj");
         buttonBar.getButtons().addAll(button, button2);
 
         button2.setOnAction(e -> dialog.close());
