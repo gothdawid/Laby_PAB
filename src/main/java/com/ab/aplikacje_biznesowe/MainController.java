@@ -79,9 +79,11 @@ public class MainController {
 
 
 
-
+        HBox layout = new HBox(10);
         Button button = new Button("Add");
         Button button2 = new Button("Cancel");
+        layout.getChildren().addAll(button, button2);
+
         button2.setOnAction(e -> dialog.close());
         button.setOnAction(e -> {
             try {
@@ -103,7 +105,7 @@ public class MainController {
             dialog.close();
         });
 
-        dialogVbox.getChildren().addAll(label, name, surname, address, city, group, password, isTeacher, button, button2);
+        dialogVbox.getChildren().addAll(label, name, surname, address, city, group, password, isTeacher, layout);
 
         dialog.showAndWait();
     }
