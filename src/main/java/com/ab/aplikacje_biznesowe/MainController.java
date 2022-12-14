@@ -1,17 +1,21 @@
 package com.ab.aplikacje_biznesowe;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -33,6 +37,8 @@ public class MainController {
     public BorderPane pane;
     public static ResultSet users;
     public Text logger_out;
+    public Button searchButton;
+    public TextField searchField;
     ObservableList<User> usersList = FXCollections.observableArrayList();
     TableView<User> table = new TableView<>();
 
@@ -70,8 +76,17 @@ public class MainController {
 
     }
 
-    public void addRow(ActionEvent actionEvent) {
-        //open new window for add new user
+
+    public void addRow(ActionEvent actionEvent){
+        addRow("","","","","",0,false);
+    }
+
+    public void addRow(User user){
+        addRow(user.getFirst_name(),user.getLast_name(),user.getAddress(), user.getCity(), user.getPassword(), user.getGroup_id(), user.getTeacher());
+    }
+
+
+    public void addRow(String na, String sur, String addr, String cit, String pass, Integer grid, Boolean iTeach) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(HelloApplication.connect_Scene.getWindow());
@@ -83,23 +98,32 @@ public class MainController {
         label.setFont(new Font("Arial", 20));
         TextField name = new TextField();
         name.setPromptText("Name");
+        name.setText(na);
         TextField surname = new TextField();
         surname.setPromptText("Surname");
+        surname.setText(sur);
         TextField address = new TextField();
         address.setPromptText("Address");
+        address.setText(addr);
         TextField city = new TextField();
         city.setPromptText("City");
+        city.setText(cit);
         TextField group = new TextField();
         group.setPromptText("Group");
+        group.setText(grid.toString());
         TextField password = new TextField();
         password.setPromptText("Password");
+        password.setText(pass);
         CheckBox isTeacher = new CheckBox("Is teacher");
+        isTeacher.setSelected(iTeach);
 
 
 
-
+        HBox layout = new HBox(10);
         Button button = new Button("Add");
         Button button2 = new Button("Cancel");
+        layout.getChildren().addAll(button, button2);
+
         button2.setOnAction(e -> dialog.close());
         button.setOnAction(e -> {
             try {
@@ -109,7 +133,7 @@ public class MainController {
                 users.updateString("address", address.getText());
                 users.updateString("city", city.getText());
                 users.updateInt("group_id", Integer.parseInt(group.getText()));
-                users.updateBoolean("isTeacher", false);
+                users.updateBoolean("isTeacher", isTeacher.isSelected());
                 users.updateString("password", password.getText());
                 users.insertRow();
                 loadUsers(null);
@@ -121,7 +145,7 @@ public class MainController {
             dialog.close();
         });
 
-        dialogVbox.getChildren().addAll(label, name, surname, address, city, group, password, isTeacher, button, button2);
+        dialogVbox.getChildren().addAll(label, name, surname, address, city, group, password, isTeacher, layout);
 
         dialog.showAndWait();
     }
@@ -185,16 +209,16 @@ public class MainController {
     }
 
     public void initialize(){
-        //add key handler
-        //if ctrl + i insert new row
-        //if ctrl + d delete row
 
         pane.setOnKeyPressed(event -> {
             if(event.isControlDown() && event.getCode().toString().equals("I")){
-                addRow(null);
+                addRow("", "", "", "", "", 0, false);
             }
             if(event.isControlDown() && event.getCode().toString().equals("D")){
                 deleteChecked(null);
+            }
+            if(event.isControlDown() && event.getCode().toString().equals("C")){
+                addRow(table.getSelectionModel().getSelectedItem());
             }
         });
 
@@ -243,6 +267,43 @@ public class MainController {
 
     public void loadUsers(ActionEvent actionEvent) {
         int i = 0;
+        //searchField on enter
+        searchField.setOnKeyPressed(event -> {
+            if(event.getCode().equals(KeyCode.ENTER)){
+                searchButton.fire();
+            }
+        });
+        searchButton.addEventHandler(ActionEvent.ACTION, event -> {
+            if(!event.getEventType().equals(ActionEvent.ACTION)){
+                return;
+            }
+            try {
+                usersList.clear();
+                users.beforeFirst();
+                while (users.next()) {
+                    if (users.getString("first_name").toLowerCase().contains(searchField.getText().toLowerCase()) || users.getString("last_name").toLowerCase().contains(searchField.getText().toLowerCase())) {
+                        usersList.add(new User(
+                                users.getInt("id"),
+                                users.getString("first_name"),
+                                users.getString("last_name"),
+                                users.getString("address"),
+                                users.getString("city"),
+                                users.getInt("group_id"),
+                                users.getString("avatar"),
+                                users.getBoolean("isTeacher"),
+                                users.getString("createdAt"),
+                                users.getString("updatedAt"),
+                                users.getString("password"),
+                                false
+                        ));
+                    }
+                }
+                RefreshTable();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
         users = HelloApplication.connection.executeQuery("SELECT * FROM user");
 
         table.setEditable(true);
@@ -258,6 +319,33 @@ public class MainController {
         TableColumn<User, String> updatedAtColumn = new TableColumn<>("Aktualizacja");
         TableColumn<User, String> passwordColumn = new TableColumn<>("Hasło");
         TableColumn<User, Boolean> isTeacherColumn = new TableColumn<>("Nauczyciel");
+
+        //contex menu
+        table.setRowFactory(tv -> {
+            TableRow<User> row = new TableRow<>();
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem deleteItem = new MenuItem("Usuń");
+            MenuItem copyItem = new MenuItem("Kopiuj");
+            MenuItem addItem = new MenuItem("Dodaj");
+            deleteItem.setOnAction(event -> {
+                deleteChecked(null);
+            });
+            copyItem.setOnAction(event -> {
+                addRow(row.getItem());
+                System.out.println("Kopiuj");
+            });
+            addItem.setOnAction(event -> {
+                addRow("", "", "", "", "", 0, false);
+            });
+            contextMenu.getItems().addAll(addItem, copyItem, deleteItem);
+            row.contextMenuProperty().bind(
+                    Bindings.when(row.emptyProperty())
+                            .then((ContextMenu)null)
+                            .otherwise(contextMenu)
+            );
+            return row ;
+        });
+
 
         checkboxColumn.setCellValueFactory(userBooleanCellDataFeatures -> {
             User user = userBooleanCellDataFeatures.getValue();
@@ -373,7 +461,6 @@ public class MainController {
                 (TableColumn.CellEditEvent<User, String> t) -> {
                     try {
                         ((User) t.getTableView().getItems().get(t.getTablePosition().getRow())).setPassword(t.getNewValue());
-                        //freach userslist
                         for (User user : usersList) {
                             if(user.getChecked()){
                                 //print user id
@@ -411,7 +498,6 @@ public class MainController {
                 }
         );
 
-
         table.getColumns().addAll(checkboxColumn ,idColumn, nameColumn, surnameColumn, addressColumn, cityColumn, groupColumn, createdAtColumn, updatedAtColumn, passwordColumn, isTeacherColumn);
 
         DownloadUsers();
@@ -422,10 +508,24 @@ public class MainController {
         for (User user : usersList) {
             user.setChecked(false);
         }
-        //RefreshTable();
         DownloadUsers();
     }
 
 
+    public void copyFromMenu(ActionEvent actionEvent) {
+        User us = table.getSelectionModel().getSelectedItem();
+        if (us == null) {
+            return;
+        }
+        addRow(us);
+    }
+
+    public void inserFromMenu(ActionEvent actionEvent) {
+        addRow("","","","","",0,false);
+    }
+
+    public void deleteFromMenu(ActionEvent actionEvent) {
+        deleteChecked(null);
+    }
 }
 
