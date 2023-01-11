@@ -1,5 +1,6 @@
 package com.ab.aplikacje_biznesowe;
 
+import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -93,7 +94,8 @@ public class MainController {
         VBox dialogVbox = new VBox(20);
         dialog.setTitle("Wstaw nowego użytkownika");
 
-        dialog.setScene(new Scene(dialogVbox, 420, 400));
+        dialog.setScene(new Scene(dialogVbox, 380, 340));
+        dialog.setResizable(false);
         Label label = new Label("Wstaw użytkownika");
         label.setFont(new Font("Serif", 15));
         TextField name = new TextField();
@@ -161,8 +163,7 @@ public class MainController {
         dialogHbox3.setAlignment(Pos.CENTER);
         layout.setAlignment(Pos.CENTER);
 
-        dialog.setMinWidth(400);
-        dialog.setMinHeight(360);
+
 
 
         dialogVbox.getChildren().addAll(label, dialogHbox1, dialogHbox2, dialogHbox3, isTeacher, layout);
@@ -193,14 +194,13 @@ public class MainController {
             }
         }
         list.setItems(items);
-        if (items.size() == 0){
-            //get selected users from table
-            table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-            ObservableList<User> selectedUsers = table.getSelectionModel().getSelectedItems();
-            for (User user : selectedUsers) {
-                items.add(user.getId() +": " + user.getFirst_name() + " " + user.getLast_name());
-            }
-        }
+//        if (list.getItems().size() == 0){
+//            ObservableList<User> selectedUsers = table.getSelectionModel().getSelectedItems();
+//            logger.info(String.valueOf(selectedUsers.size()));
+//            for (User user : selectedUsers) {
+//                items.add(user.getId() +": " + user.getFirst_name() + " " + user.getLast_name());
+//            }
+//        }
 
         ButtonBar buttonBar = new ButtonBar();
         Button button = new Button("Usuń");
@@ -306,7 +306,12 @@ public class MainController {
                 usersList.clear();
                 users.beforeFirst();
                 while (users.next()) {
-                    if (users.getString("first_name").toLowerCase().contains(searchField.getText().toLowerCase()) || users.getString("last_name").toLowerCase().contains(searchField.getText().toLowerCase())) {
+                    if (users.getString("first_name").toLowerCase().contains(searchField.getText().toLowerCase()) ||
+                            users.getString("last_name").toLowerCase().contains(searchField.getText().toLowerCase()) ||
+                            users.getString("city").toLowerCase().contains(searchField.getText().toLowerCase()) ||
+                            users.getString("address").toLowerCase().contains(searchField.getText().toLowerCase())
+
+                    ) {
                         usersList.add(new User(
                                 users.getInt("id"),
                                 users.getString("first_name"),
@@ -551,6 +556,10 @@ public class MainController {
 
     public void deleteFromMenu(ActionEvent actionEvent) {
         deleteChecked(null);
+    }
+
+    public void quit(ActionEvent actionEvent) {
+        System.exit(0);
     }
 }
 

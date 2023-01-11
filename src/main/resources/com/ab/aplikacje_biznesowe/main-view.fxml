@@ -22,7 +22,7 @@
         <Menu mnemonicParsing="false" text="File">
             <MenuItem disable="true" mnemonicParsing="false" text="Parse PDF…" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Quit" />
+            <MenuItem mnemonicParsing="false" text="Quit" onAction="#quit" />
         </Menu>
         <Menu mnemonicParsing="false" text="Edit">
             <MenuItem mnemonicParsing="false" onAction="#inserFromMenu" text="Wstaw (Ctrl + I)" />
