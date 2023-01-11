@@ -561,5 +561,11 @@ public class MainController {
     public void quit(ActionEvent actionEvent) {
         System.exit(0);
     }
+
+    public void pdfCreator(ActionEvent actionEvent) {
+          PdfCreator creator = new PdfCreator();
+          // select users
+          //creator.PrintAllUsers();
+    }
 }
 

@@ -20,7 +20,7 @@
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ab.aplikacje_biznesowe.MainController">
     <MenuBar VBox.vgrow="NEVER">
         <Menu mnemonicParsing="false" text="File">
-            <MenuItem disable="true" mnemonicParsing="false" text="Parse PDF…" />
+            <MenuItem mnemonicParsing="false" text="Parse PDF…" onAction="#pdfCreator"/>
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Quit" onAction="#quit" />
         </Menu>
