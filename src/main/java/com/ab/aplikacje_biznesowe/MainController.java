@@ -1,5 +1,6 @@
 package com.ab.aplikacje_biznesowe;
 
+import com.itextpdf.text.DocumentException;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -29,6 +30,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.converter.IntegerStringConverter;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -563,9 +565,14 @@ public class MainController {
     }
 
     public void pdfCreator(ActionEvent actionEvent) {
-          PdfCreator creator = new PdfCreator();
-          // select users
-          //creator.PrintAllUsers();
+        try {
+            logger.info("Creating PDF");
+            PdfCreator pdfCreator = new PdfCreator();
+            pdfCreator.createPdf(usersList);
+            logger.info("PDF created");
+        } catch (Exception e) {
+            logger.info("Error while creating pdf");
+        }
     }
 }
 

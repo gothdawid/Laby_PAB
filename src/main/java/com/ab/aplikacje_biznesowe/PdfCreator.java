@@ -20,7 +20,7 @@ public class PdfCreator {
         return FontFactory.getFont(FontFactory.TIMES_ROMAN, BaseFont.CP1250, false);
     }
 
-    public void PrintAllUsers(Collection<User> users) throws IOException, DocumentException {
+    public void createPdf(Collection<User> users) throws IOException, DocumentException {
         // tworzenie tabelki
         Document document = new Document();
         PdfWriter.getInstance(document, new FileOutputStream("iTextTable.pdf"));
@@ -48,13 +48,6 @@ public class PdfCreator {
         document.close();
     }
 
-    public static void main(String[] args) throws DocumentException, IOException {
-        var creator = new PdfCreator();
-        var users = new ArrayList<User>();
-        users.add(new User(1, "Tuptas", "Hashtag", "NS", "Tuptasowo", 1, "", false, "", "", "", true));
-        users.add(new User(2, "Tuptas2", "Hashtag2", "NS", "Zielona Góra", 2, "", false, "", "", "", true));
-        creator.PrintAllUsers(users);
-    }
 
     private void addTableHeader(PdfPTable table, String[] headers) {
         Stream.of(headers).forEach(columnTitle -> {
