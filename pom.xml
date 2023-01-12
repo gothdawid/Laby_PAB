@@ -120,7 +120,7 @@
                 <executions>
                     <execution>
                         <configuration>
-                            <mainClass>com.ab.aplikacje_biznesowe.HelloApplication
+                            <mainClass>com.ab.aplikacje_biznesowe.NewMain
                             </mainClass>
                         </configuration>
                     </execution>
@@ -151,7 +151,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.ab.aplikacje_biznesowe.HelloApplication
+                            <mainClass>com.ab.aplikacje_biznesowe.NewMain
                             </mainClass>
                         </manifest>
                     </archive>
@@ -166,7 +166,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.ab.aplikacje_biznesowe.HelloApplication</mainClass>
+                            <mainClass>com.ab.aplikacje_biznesowe.NewMain</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
