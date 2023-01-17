@@ -1,5 +1,7 @@
 package com.ab.aplikacje_biznesowe;
 
+import com.itextpdf.text.DocumentException;
+import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -27,7 +29,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.converter.IntegerStringConverter;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -93,7 +98,8 @@ public class MainController {
         VBox dialogVbox = new VBox(20);
         dialog.setTitle("Wstaw nowego użytkownika");
 
-        dialog.setScene(new Scene(dialogVbox, 420, 400));
+        dialog.setScene(new Scene(dialogVbox, 380, 340));
+        dialog.setResizable(false);
         Label label = new Label("Wstaw użytkownika");
         label.setFont(new Font("Serif", 15));
         TextField name = new TextField();
@@ -161,8 +167,7 @@ public class MainController {
         dialogHbox3.setAlignment(Pos.CENTER);
         layout.setAlignment(Pos.CENTER);
 
-        dialog.setMinWidth(400);
-        dialog.setMinHeight(360);
+
 
 
         dialogVbox.getChildren().addAll(label, dialogHbox1, dialogHbox2, dialogHbox3, isTeacher, layout);
@@ -193,14 +198,13 @@ public class MainController {
             }
         }
         list.setItems(items);
-        if (items.size() == 0){
-            //get selected users from table
-            table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-            ObservableList<User> selectedUsers = table.getSelectionModel().getSelectedItems();
-            for (User user : selectedUsers) {
-                items.add(user.getId() +": " + user.getFirst_name() + " " + user.getLast_name());
-            }
-        }
+//        if (list.getItems().size() == 0){
+//            ObservableList<User> selectedUsers = table.getSelectionModel().getSelectedItems();
+//            logger.info(String.valueOf(selectedUsers.size()));
+//            for (User user : selectedUsers) {
+//                items.add(user.getId() +": " + user.getFirst_name() + " " + user.getLast_name());
+//            }
+//        }
 
         ButtonBar buttonBar = new ButtonBar();
         Button button = new Button("Usuń");
@@ -306,7 +310,12 @@ public class MainController {
                 usersList.clear();
                 users.beforeFirst();
                 while (users.next()) {
-                    if (users.getString("first_name").toLowerCase().contains(searchField.getText().toLowerCase()) || users.getString("last_name").toLowerCase().contains(searchField.getText().toLowerCase())) {
+                    if (users.getString("first_name").toLowerCase().contains(searchField.getText().toLowerCase()) ||
+                            users.getString("last_name").toLowerCase().contains(searchField.getText().toLowerCase()) ||
+                            users.getString("city").toLowerCase().contains(searchField.getText().toLowerCase()) ||
+                            users.getString("address").toLowerCase().contains(searchField.getText().toLowerCase())
+
+                    ) {
                         usersList.add(new User(
                                 users.getInt("id"),
                                 users.getString("first_name"),
@@ -551,6 +560,33 @@ public class MainController {
 
     public void deleteFromMenu(ActionEvent actionEvent) {
         deleteChecked(null);
+    }
+
+    public void quit(ActionEvent actionEvent) {
+        System.exit(0);
+    }
+
+    public void pdfCreator(ActionEvent actionEvent) {
+        try {
+            logger.info("Creating PDF");
+            PdfCreator pdfCreator = new PdfCreator();
+            pdfCreator.createPdf(usersList);
+            logger.info("PDF created");
+        } catch (Exception e) {
+            logger.info("Error while creating pdf");
+        }
+    }
+
+    public void printPdf(ActionEvent actionEvent) {
+        PDDocument document = new PDDocument();
+        try {
+            document = PDDocument.load(new File("iTextTable.pdf"));
+            PdfCreator pdfCreator = new PdfCreator();
+            pdfCreator.printWithDialog(document);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
 

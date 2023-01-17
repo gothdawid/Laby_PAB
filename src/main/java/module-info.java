@@ -10,6 +10,9 @@ module com.ab.aplikacje_biznesowe {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires java.sql;
+    requires itextpdf;
+    requires java.desktop;
+    requires org.apache.pdfbox;
 
     opens com.ab.aplikacje_biznesowe to javafx.fxml;
     exports com.ab.aplikacje_biznesowe;
