@@ -40,5 +40,7 @@
     <orderEntry type="library" name="Maven: org.apache.pdfbox:pdfbox:2.0.27" level="project" />
     <orderEntry type="library" name="Maven: org.apache.pdfbox:fontbox:2.0.27" level="project" />
     <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.tukaani:xz:1.8" level="project" />
+    <orderEntry type="library" name="Maven: com.AB:Aplikacje_Biznesowe:2.0.27" level="project" />
   </component>
 </module>

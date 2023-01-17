@@ -20,9 +20,10 @@
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ab.aplikacje_biznesowe.MainController">
     <MenuBar VBox.vgrow="NEVER">
         <Menu mnemonicParsing="false" text="File">
-            <MenuItem mnemonicParsing="false" text="Parse PDF…" onAction="#pdfCreator"/>
+            <MenuItem mnemonicParsing="false" onAction="#pdfCreator" text="Parse PDF…" />
+         <MenuItem mnemonicParsing="false" onAction="#printPdf" text="Print" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Quit" onAction="#quit" />
+            <MenuItem mnemonicParsing="false" onAction="#quit" text="Quit" />
         </Menu>
         <Menu mnemonicParsing="false" text="Edit">
             <MenuItem mnemonicParsing="false" onAction="#inserFromMenu" text="Wstaw (Ctrl + I)" />

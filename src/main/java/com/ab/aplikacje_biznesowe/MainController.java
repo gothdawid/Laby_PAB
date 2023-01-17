@@ -29,7 +29,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.converter.IntegerStringConverter;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -573,6 +575,18 @@ public class MainController {
         } catch (Exception e) {
             logger.info("Error while creating pdf");
         }
+    }
+
+    public void printPdf(ActionEvent actionEvent) {
+        PDDocument document = new PDDocument();
+        try {
+            document = PDDocument.load(new File("iTextTable.pdf"));
+            PdfCreator pdfCreator = new PdfCreator();
+            pdfCreator.printWithDialog(document);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
 
